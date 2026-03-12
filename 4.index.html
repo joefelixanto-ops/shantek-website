@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shantek Instruments — Precision Weighing Solutions</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -638,28 +637,6 @@ footer { background: var(--blue-dark); padding: 64px 24px 28px; color: rgba(255,
 
   .toast { right: 12px; bottom: 80px; min-width: unset; width: calc(100vw - 24px); }
 }
-
-/* Make anchor tags styled as btn-outline look identical to button version */
-a.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  line-height: normal;
-  box-sizing: border-box;
-}
-a.btn-mobile-outline {
-  display: block;
-  text-decoration: none;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-
-img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertical-align:-0.1em;border:none;box-shadow:none;background:none}
-.cat-emoji img.emoji{height:40px;width:40px;margin:0;vertical-align:middle}
-.prod-img-icon img.emoji{height:72px;width:72px;margin:0;vertical-align:middle}
-
 </style>
 </head>
 <body>
@@ -681,7 +658,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
   <div class="topbar-right">
     <span>Mon–Sat: 9AM – 6PM</span>
     <span>|</span>
-    <a href="catalogue/shantek-catalogue.pdf" download>Download Catalogue</a>
+    <a href="#">Download Catalogue</a>
   </div>
 </div>
 
@@ -703,7 +680,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       <a href="#contact">Contact</a>
     </nav>
     <div class="header-actions">
-      <a href="catalogue/shantek-catalogue.pdf" download class="btn-outline">Catalogue</a>
+      <button class="btn-outline" onclick="showToast('Catalogue Ready', 'PDF preparing for download.')">Catalogue</button>
       <button class="btn-primary-sm" onclick="showToast('Enquiry Sent!', 'We\'ll call you within 2 hours.')">Get Quote</button>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -721,7 +698,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-actions">
     <button class="btn-mobile-primary" onclick="showToast('Enquiry Sent!','We\'ll call you within 2 hours.'); closeMenu();">Get a Free Quote</button>
-    <a href="catalogue/shantek-catalogue.pdf" download class="btn-mobile-outline">Download Catalogue</a>
+    <button class="btn-mobile-outline" onclick="showToast('Catalogue Ready','PDF preparing.'); closeMenu();">Download Catalogue</button>
   </div>
   <div class="mobile-contact-info">
     <a href="tel:+912212345678">📞 +91 22 1234 5678</a>
@@ -1117,7 +1094,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© Joe felix anto changes  Pvt. Ltd. All rights reserved.</p>
+    <p>© 2025 Shantek Instruments Pvt. Ltd. All rights reserved.</p>
     <div class="certs">
       <span class="cert">ISO 9001:2015</span>
       <span class="cert">NABL</span>
@@ -1204,46 +1181,314 @@ document.querySelectorAll('.reveal').forEach((el, i) => {
 // ── TOAST ──
 function showToast(title, msg) {
   const  t = document.getElementById('toast');
-  const _tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const _tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(_tT)_tT.textContent=title;if(_tM)_tM.textContent=msg||'';
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg || '';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
 
-<!-- DYNAMIC DATA LOADER -->
+<!-- ═══════════════════════════════════════════════════
+     DYNAMIC DATA LOADER — reads from data.json
+     This makes the website update when admin saves
+═══════════════════════════════════════════════════ -->
 <script>
-const API='api/api.php';
-let SITE={whatsapp:'912212345678',page:1,limit:20,search:'',category:'',totalPages:1,searchTimer:null};
-function twemojify(el){if(window.twemoji&&el)twemoji.parse(el,{folder:'svg',ext:'.svg',base:'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/'});}
-const CAT_EMOJI_MAP={'platform scale':'⚖️','platform scales':'⚖️','analytical balance':'🔬','analytical balances':'🔬','medical scale':'🏥','medical scales':'🏥','jewellery scale':'💎','jewellery scales':'💎','jewelry scale':'💎','jewelry scales':'💎','crane scale':'🏗️','crane scales':'🏗️','moisture analyser':'🌡️','moisture analysers':'🌡️','moisture analyzer':'🌡️','moisture analyzers':'🌡️','bench scale':'🧪','bench scales':'🧪','floor scale':'📦','floor scales':'📦'};
-function getCatEmoji(name){return CAT_EMOJI_MAP[(name||'').toLowerCase().trim()]||'📦';}
-const CAT_BG={'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
-function revealNow(container){const obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.05,rootMargin:'0px 0px 100px 0px'});(container||document.body).querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight+100)el.classList.add('visible');else obs.observe(el);});}
-async function initSite(){try{const res=await fetch(`${API}?action=get_all&v=${Date.now()}`);const data=await res.json();if(!data.success)throw new Error('API failed');applyCompany(data.company||{});renderSliderFromDB(data.slides||[]);renderStatsFromDB(data.stats||[]);renderCatsFromDB(data.categories||[]);renderTestisFromDB(data.testimonials||[]);buildFilterTabs(data.categories||[]);loadProductsFromDB();}catch(e){console.warn('API not available:',e.message);const g=document.getElementById('prodGrid');if(g)g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:8px">Cannot connect to database</div></div>';}}
-function applyCompany(c){if(!c)return;SITE.whatsapp=c.whatsapp||SITE.whatsapp;const w=document.getElementById('waBtnFloat');if(w)w.href=`https://wa.me/${c.whatsapp}?text=Hello!`;['footerName','footerCompany'].forEach(id=>{const el=document.getElementById(id);if(el&&c.name)el.textContent=c.name;});const fa=document.getElementById('footerAbout');if(fa&&c.about)fa.textContent=c.about;const fp=document.getElementById('footerPhone');if(fp&&c.phone)fp.textContent='📞 '+c.phone;const fe=document.getElementById('footerEmail');if(fe&&c.email)fe.textContent='✉️ '+c.email;const fd=document.getElementById('footerAddr');if(fd&&c.address)fd.textContent='📍 '+c.address;}
-const SLIDE_BG=['slide-1','slide-2','slide-3'];
-const SLIDE_SVG=['<svg viewBox="0 0 600 600" fill="none"><circle cx="300" cy="300" r="280" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="200" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="120" stroke="white" stroke-width=".5"/><line x1="0" y1="300" x2="600" y2="300" stroke="white" stroke-width=".5"/><line x1="300" y1="0" x2="300" y2="600" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><rect x="50" y="50" width="500" height="500" stroke="white" stroke-width=".5"/><rect x="150" y="150" width="300" height="300" stroke="white" stroke-width=".5"/><line x1="50" y1="50" x2="550" y2="550" stroke="white" stroke-width=".5"/><line x1="550" y1="50" x2="50" y2="550" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><polygon points="300,20 580,580 20,580" stroke="white" stroke-width=".5" fill="none"/><polygon points="300,100 500,500 100,500" stroke="white" stroke-width=".5" fill="none"/></svg>'];
-const SLIDE_ICONS=['⚖️','🔬','🏗️','💎','🌡️','💊'];
-function renderSliderFromDB(slides){if(!slides||!slides.length)return;const cont=document.getElementById('heroSlider');if(!cont)return;cont.querySelectorAll('.slide').forEach(function(el){el.remove();});const dw=cont.querySelector('.slider-dots');if(dw)dw.innerHTML='';slides.forEach(function(s,i){const div=document.createElement('div');div.className='slide '+SLIDE_BG[i%3]+(i===0?' active':'');div.id='slide-'+i;div.innerHTML='<div class="slide-pattern">'+SLIDE_SVG[i%3]+'</div>'+(s.bg_image?'<img src="images/'+s.bg_image+'" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.18">':'')+' <div class="slide-content"><div class="slide-left"><div class="slide-pill"><span></span> '+(s.subtitle||'Precision Weighing')+'</div><h1 class="slide-h1">'+(s.title||'Shantek Instruments')+'</h1><p class="slide-p">'+(s.desc_text||'')+'</p><div class="slide-btns"><a href="#products" class="btn-hero-primary">'+(s.btn1||'Explore Products')+'</a><a href="#contact" class="btn-hero-ghost">'+(s.btn2||'Request Quote')+'</a></div></div><div class="slide-right"><div class="ring ring-1"><div class="ring-dot"></div></div><div class="ring ring-2"></div><div class="slide-visual"><div class="icon">'+SLIDE_ICONS[i%SLIDE_ICONS.length]+'</div></div></div></div>';cont.insertBefore(div,cont.querySelector('.slider-controls'));twemojify(div);if(dw){const dot=document.createElement('div');dot.className='dot'+(i===0?' active':'');dot.onclick=(function(idx){return function(){goTo(idx);};})(i);dw.appendChild(dot);}});current=0;clearTimeout(timer);resetProgress();}
-function renderStatsFromDB(stats){const b=document.getElementById('statsBar');if(!b||!stats.length)return;b.innerHTML=stats.map(s=>`<div class="stat-item"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('');}
-function renderCatsFromDB(cats){const grid=document.getElementById('catGrid');if(!grid||!cats.length)return;grid.innerHTML=cats.map(c=>{const e=getCatEmoji(c.name),sl=(c.slug||'').replace(/'/g,"\\'");return`<div class="cat-card reveal" onclick="filterBySlug('${sl}',null)"><span class="cat-emoji">${e}</span><div class="cat-name">${c.name}</div><div class="cat-count">${c.count?c.count+' products':''}</div></div>`;}).join('');twemojify(grid);revealNow(grid);}
-function buildFilterTabs(cats){const wrap=document.getElementById('filterTabs');if(!wrap)return;wrap.innerHTML='<button class="filter-tab active" onclick="filterBySlug(\'\',this)">All</button>';cats.forEach(c=>{const btn=document.createElement('button');btn.className='filter-tab';btn.textContent=getCatEmoji(c.name)+' '+c.name;btn.onclick=function(){filterBySlug(c.slug,this);};wrap.appendChild(btn);});twemojify(wrap);}
-function filterBySlug(slug,el){SITE.category=slug;SITE.page=1;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');else document.querySelectorAll('.filter-tab').forEach(t=>{if(t.textContent.toLowerCase().includes(slug))t.classList.add('active');});loadProductsFromDB();document.getElementById('products').scrollIntoView({behavior:'smooth'});}
-function onSearchInput(val){clearTimeout(SITE.searchTimer);SITE.searchTimer=setTimeout(()=>{SITE.search=val.trim();SITE.page=1;loadProductsFromDB();},400);}
-async function loadProductsFromDB(){showProductSkeletons();const p=new URLSearchParams({action:'get_products',page:SITE.page,limit:SITE.limit,search:SITE.search,category:SITE.category,v:Date.now()});try{const res=await fetch(`${API}?${p}`);const data=await res.json();if(!data.success)throw new Error(data.message);renderProductsFromDB(data.products||[]);renderProductMeta(data);renderProductPagination(data);}catch(e){document.getElementById('prodGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:36px">😕</div><p>Could not load products</p></div>';}}
-function renderProductsFromDB(prods){const grid=document.getElementById('prodGrid');if(!grid)return;if(!prods.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#94a3b8"><div style="font-size:48px;margin-bottom:12px">🔍</div><h3 style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:8px">No products found</h3><p>Try a different search or category</p></div>';twemojify(grid);return;}grid.innerHTML=prods.map(p=>{const bg=CAT_BG[p.cat]||'linear-gradient(135deg,#e8f0fe,#c7d9ff)',em=getCatEmoji(p.cat);const imgSrc=p.image_url?(p.image_url.startsWith('http')||p.image_url.startsWith('data:')?p.image_url:`images/${p.image_url}`):'';const specs=[p.spec1,p.spec2,p.spec3].filter(Boolean),sn=p.name.replace(/'/g,"\\'");return`<div class="prod-card reveal"><div class="prod-img" style="background:${bg}">${imgSrc?`<img src="${imgSrc}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<div class="prod-img-icon">${em}</div>`}${p.badge?`<div class="prod-badge badge-blue">${p.badge}</div>`:''}<button class="prod-wishlist" onclick="event.stopPropagation();showToast('Saved!','Added to wishlist.')">♡</button></div><div class="prod-body"><div class="prod-cat">${p.cat}</div><h3 class="prod-name">${p.name}</h3>${p.description?`<p class="prod-desc">${p.description}</p>`:''}${specs.length?`<div class="prod-specs">${specs.map(s=>`<span class="spec-tag">✓ ${s}</span>`).join('')}</div>`:''}<div class="prod-footer"><div class="prod-price"><div class="from">From</div><div class="price">${p.price||'<span style="font-size:13px;font-family:Montserrat,sans-serif">Contact Us</span>'}</div></div><button class="btn-enquire-sm" onclick="sendEnquiry('${sn}','${p.price||''}')">💬 Enquire</button></div></div></div>`;}).join('');twemojify(grid);revealNow(grid);}
-function renderProductMeta(data){const el=document.getElementById('productsMeta');if(!el)return;if(!data.total){el.textContent='No products found';return;}const l=data.limit||SITE.limit,pg=data.page||SITE.page;el.innerHTML=`Showing <strong>${(pg-1)*l+1}–${Math.min(pg*l,data.total)}</strong> of <strong>${data.total}</strong> products`;}
-function renderProductPagination(data){const wrap=document.getElementById('pagination');if(!wrap)return;SITE.totalPages=data.total_pages||1;SITE.page=data.page||1;if(SITE.totalPages<=1){wrap.innerHTML='';return;}let h=`<button class="page-btn" onclick="goPage(${SITE.page-1})" ${!data.has_prev?'disabled':''}>◀</button>`;for(let i=1;i<=SITE.totalPages;i++){if(i===1||i===SITE.totalPages||Math.abs(i-SITE.page)<=1)h+=`<button class="page-btn ${i===SITE.page?'active':''}" onclick="goPage(${i})">${i}</button>`;else if(Math.abs(i-SITE.page)===2)h+=`<span style="color:#94a3b8;padding:0 4px">...</span>`;}h+=`<button class="page-btn" onclick="goPage(${SITE.page+1})" ${!data.has_next?'disabled':''}>▶</button>`;wrap.innerHTML=h;}
-function goPage(p){if(p<1||p>SITE.totalPages)return;SITE.page=p;loadProductsFromDB();document.getElementById('products').scrollIntoView({behavior:'smooth'});}
-function showProductSkeletons(){const g=document.getElementById('prodGrid');if(g)g.innerHTML=Array(6).fill(0).map(()=>'<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden"><div style="height:200px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div><div style="padding:16px"><div style="height:10px;width:60%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div><div style="height:14px;width:80%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px"></div></div></div>').join('');}
-function renderTestisFromDB(list){const g=document.getElementById('testiGrid');if(!g||!list.length)return;g.innerHTML=list.map(t=>`<div class="testi-card reveal"><div class="testi-top"><div class="stars">${'⭐'.repeat(t.stars||5)}</div><div class="quote-mark">"</div></div><p class="testi-text">"${t.review||t.text||''}"</p><div class="testi-author"><div class="testi-avatar">${(t.name||'C')[0]}</div><div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role||''}</div></div></div></div>`).join('');twemojify(g);revealNow(g);}
-function sendEnquiry(name,price){const wa=SITE.whatsapp||'912212345678';const msg=encodeURIComponent(`Hello! I am interested in *${name}*${price?' ('+price+')':''}. Please send more details.`);window.open(`https://wa.me/${wa}?text=${msg}`,'_blank');}
-function showToast(title,msg){const t=document.getElementById('toast');const tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(tT)tT.textContent=title;if(tM)tM.textContent=msg||'';if(t){t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}}
-const _st=document.createElement('style');
-_st.textContent='@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.page-btn{width:36px;height:36px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}.page-btn:hover{border-color:#2563c8;color:#2563c8}.page-btn.active{background:#2563c8;border-color:#2563c8;color:#fff}.page-btn:disabled{opacity:.35;cursor:not-allowed}.filter-tab{padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:20px;background:#fff;font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;cursor:pointer;color:#64748b;transition:all .2s}.filter-tab:hover,.filter-tab.active{background:#2563c8;border-color:#2563c8;color:#fff}';
-document.head.appendChild(_st);
+// ══════════════════════════════════════════════
+//  SHANTEK WEBSITE — MySQL API Data Loader
+//  Connects to api/api.php for all data
+// ══════════════════════════════════════════════
+
+const API = 'api/api.php';
+let SITE = { whatsapp: '912212345678', page: 1, limit: 20, search: '', category: '', totalPages: 1, searchTimer: null };
+
+// ── INIT ──
+async function initSite() {
+  try {
+    const res  = await fetch(`${API}?action=get_all&v=${Date.now()}`);
+    const data = await res.json();
+    if (!data.success) throw new Error('API failed');
+
+    applyCompany(data.company || {});
+    renderSliderFromDB(data.slides || []);
+    renderStatsFromDB(data.stats || []);
+    renderCatsFromDB(data.categories || []);
+    renderTestisFromDB(data.testimonials || []);
+    buildFilterTabs(data.categories || []);
+    loadProductsFromDB();
+  } catch(e) {
+    console.warn('MySQL API not available:', e.message);
+    // Show helpful message in products area
+    const grid = document.getElementById('prodGrid');
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8">
+      <div style="font-size:40px;margin-bottom:12px">⚠️</div>
+      <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:8px">Cannot connect to database</div>
+      <div style="font-size:13px">Make sure Apache and MySQL are running in XAMPP</div>
+    </div>`;
+  }
+}
+
+// ── COMPANY INFO ──
+function applyCompany(c) {
+  if (!c) return;
+  SITE.whatsapp = c.whatsapp || SITE.whatsapp;
+  const waUrl = `https://wa.me/${c.whatsapp}?text=Hello! I am interested in your products.`;
+  const waBtn = document.getElementById('waBtnFloat');
+  if (waBtn) waBtn.href = waUrl;
+  // Update footer
+  ['footerName','footerCompany'].forEach(id => { const el=document.getElementById(id); if(el&&c.name) el.textContent=c.name; });
+  const fa = document.getElementById('footerAbout'); if(fa&&c.about) fa.textContent=c.about;
+  const fp = document.getElementById('footerPhone'); if(fp&&c.phone) fp.textContent='📞 '+c.phone;
+  const fe = document.getElementById('footerEmail'); if(fe&&c.email) fe.textContent='✉️ '+c.email;
+  const fad= document.getElementById('footerAddr');  if(fad&&c.address) fad.textContent='📍 '+c.address;
+}
+
+// ── SLIDER ──
+let slideIndex = 0, slideInterval;
+function renderSliderFromDB(slides) {
+  if (!slides.length) return;
+  const cont = document.getElementById('heroSlider');
+  const dots  = document.getElementById('heroDots');
+  if (!cont) return;
+  cont.innerHTML = '';
+  if (dots) dots.innerHTML = '';
+
+  slides.forEach((s, i) => {
+    const bgSrc = s.bg_image ? `images/${s.bg_image}` : '';
+    const div   = document.createElement('div');
+    div.className = 'slide' + (i===0 ? ' active' : '');
+    div.innerHTML = `
+      <div class="slide-bg">${bgSrc ? `<img src="${bgSrc}" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.2">` : ''}</div>
+      <div class="slide-content">
+        <div class="slide-pill">${s.subtitle || 'Precision Weighing'}</div>
+        <div class="slide-num">0${i+1} / 0${slides.length}</div>
+        <h1 class="slide-title">${s.title || 'Shantek Instruments'}</h1>
+        <p class="slide-desc">${s.desc_text || ''}</p>
+        <div class="slide-btns">
+          <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">${s.btn1||'View Products'}</button>
+          <button class="btn-secondary" onclick="window.open('https://wa.me/${SITE.whatsapp}','_blank')">${s.btn2||'Get Quote'}</button>
+        </div>
+      </div>`;
+    cont.appendChild(div);
+
+    if (dots) {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i===0?' active':'');
+      dot.onclick   = () => goToSlide(i);
+      dots.appendChild(dot);
+    }
+  });
+  startSlideShow(slides.length);
+}
+function goToSlide(i) {
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  if (slides[i]) slides[i].classList.add('active');
+  if (dots[i])   dots[i].classList.add('active');
+  slideIndex = i;
+}
+function startSlideShow(count) {
+  clearInterval(slideInterval);
+  slideInterval = setInterval(() => goToSlide((slideIndex+1)%count), 5000);
+}
+
+// ── STATS ──
+function renderStatsFromDB(stats) {
+  const bar = document.getElementById('statsBar');
+  if (!bar || !stats.length) return;
+  bar.innerHTML = stats.map(s=>`<div class="stat-item"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('');
+}
+
+// ── CATEGORIES ──
+function renderCatsFromDB(cats) {
+  const grid = document.getElementById('catGrid');
+  if (!grid) return;
+  grid.innerHTML = cats.map(c=>`
+    <div class="cat-card" onclick="filterBySlug('${c.slug}')">
+      <div class="cat-emoji">${c.emoji}</div>
+      <div class="cat-name">${c.name}</div>
+    </div>`).join('');
+}
+
+// ── FILTER TABS ──
+function buildFilterTabs(cats) {
+  const wrap = document.getElementById('filterTabs');
+  if (!wrap) return;
+  wrap.innerHTML = `<button class="filter-tab active" onclick="filterBySlug('',this)">All</button>`;
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-tab';
+    btn.textContent = c.emoji + ' ' + c.name;
+    btn.onclick = function(){ filterBySlug(c.slug, this); };
+    wrap.appendChild(btn);
+  });
+}
+
+function filterBySlug(slug, el) {
+  SITE.category = slug; SITE.page = 1;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else document.querySelectorAll(`.filter-tab`).forEach(t => { if(t.textContent.toLowerCase().includes(slug)) t.classList.add('active'); });
+  loadProductsFromDB();
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+
+// ── SEARCH ──
+function onSearchInput(val) {
+  clearTimeout(SITE.searchTimer);
+  SITE.searchTimer = setTimeout(() => {
+    SITE.search = val.trim();
+    SITE.page   = 1;
+    loadProductsFromDB();
+  }, 400);
+}
+
+// ── LOAD PRODUCTS ──
+async function loadProductsFromDB() {
+  showProductSkeletons();
+  const params = new URLSearchParams({
+    action:   'get_products',
+    page:     SITE.page,
+    limit:    SITE.limit,
+    search:   SITE.search,
+    category: SITE.category,
+    v:        Date.now()
+  });
+  try {
+    const res  = await fetch(`${API}?${params}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    renderProductsFromDB(data.products || []);
+    renderProductMeta(data);
+    renderProductPagination(data);
+  } catch(e) {
+    document.getElementById('prodGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:36px">😕</div><p>Could not load products</p></div>`;
+  }
+}
+
+// ── RENDER PRODUCTS ──
+const CAT_BG = {'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
+const CAT_EMOJI = {'Platform Scale':'⚖️','Analytical Balance':'🔬','Medical Scale':'💊','Jewellery Scale':'💎','Crane Scale':'🏗️','Moisture Analyser':'🌡️'};
+
+function renderProductsFromDB(prods) {
+  const grid = document.getElementById('prodGrid');
+  if (!grid) return;
+  if (!prods.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#94a3b8">
+      <div style="font-size:48px;margin-bottom:12px">🔍</div>
+      <h3 style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:8px">No products found</h3>
+      <p>Try a different search or category</p>
+    </div>`;
+    return;
+  }
+  grid.innerHTML = prods.map(p => {
+    const bg     = CAT_BG[p.cat]   || 'linear-gradient(135deg,#e8f0fe,#c7d9ff)';
+    const emoji  = CAT_EMOJI[p.cat] || '📦';
+    const imgSrc = p.image_url ? (p.image_url.startsWith('http')||p.image_url.startsWith('data:') ? p.image_url : `images/${p.image_url}`) : '';
+    const specs  = [p.spec1, p.spec2, p.spec3].filter(Boolean);
+    return `<div class="prod-card reveal">
+      <div class="prod-img-wrap" style="height:180px;background:${bg};position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:52px">
+        ${imgSrc ? `<img src="${imgSrc}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'">` : emoji}
+        ${p.badge ? `<div style="position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#2563c8,#00aaff);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px">${p.badge}</div>` : ''}
+      </div>
+      <div style="padding:16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00aaff;margin-bottom:5px">${p.cat}</div>
+        <div style="font-size:14px;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3">${p.name}</div>
+        ${p.description ? `<div style="font-size:11px;color:#94a3b8;line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description}</div>` : ''}
+        ${specs.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">${specs.map(s=>`<span style="background:#f4f7fc;color:#1e293b;font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px">✓ ${s}</span>`).join('')}</div>` : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #e2e8f0">
+          <div style="font-size:16px;font-weight:800;color:#2563c8">${p.price || 'Contact Us'}</div>
+          <button onclick="sendEnquiry('${p.name.replace(/'/g,"\'")}','${p.price||''}')" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;cursor:pointer">💬 Enquire</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Reveal animation
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold:0.1});
+  document.querySelectorAll('#prodGrid .reveal').forEach(el => observer.observe(el));
+}
+
+function renderProductMeta(data) {
+  const el = document.getElementById('productsMeta');
+  if (!el) return;
+  if (!data.total) { el.textContent = 'No products found'; return; }
+  const start = (data.page-1)*data.limit+1;
+  const end   = Math.min(data.page*data.limit, data.total);
+  el.innerHTML = `Showing <strong>${start}–${end}</strong> of <strong>${data.total}</strong> products`;
+}
+
+function renderProductPagination(data) {
+  const wrap = document.getElementById('pagination');
+  if (!wrap) return;
+  if (data.total_pages <= 1) { wrap.innerHTML = ''; return; }
+  let html = `<button class="page-btn" onclick="goPage(${data.page-1})" ${!data.has_prev?'disabled':''}>◀</button>`;
+  for (let i=1; i<=data.total_pages; i++) {
+    if (i===1||i===data.total_pages||Math.abs(i-data.page)<=1) {
+      html += `<button class="page-btn ${i===data.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    } else if (Math.abs(i-data.page)===2) {
+      html += `<span style="color:#94a3b8;padding:0 4px">...</span>`;
+    }
+  }
+  html += `<button class="page-btn" onclick="goPage(${data.page+1})" ${!data.has_next?'disabled':''}>▶</button>`;
+  wrap.innerHTML = html;
+}
+
+function goPage(p) {
+  if (p<1||p>SITE.totalPages) return;
+  SITE.page = p;
+  loadProductsFromDB();
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+
+function showProductSkeletons() {
+  const grid = document.getElementById('prodGrid');
+  if (grid) grid.innerHTML = Array(8).fill(0).map(()=>`
+    <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden">
+      <div style="height:180px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+      <div style="padding:16px">
+        <div style="height:10px;width:60%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div>
+        <div style="height:14px;width:80%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div>
+        <div style="height:10px;width:100%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ── TESTIMONIALS ──
+function renderTestisFromDB(list) {
+  const grid = document.getElementById('testiGrid');
+  if (!grid || !list.length) return;
+  grid.innerHTML = list.map(t=>`
+    <div class="testi-card reveal">
+      <div style="color:#f59e0b;font-size:14px;margin-bottom:10px">${'⭐'.repeat(t.stars||5)}</div>
+      <p style="font-size:13px;color:#1e293b;line-height:1.7;margin-bottom:14px;font-style:italic">"${t.review||t.text||''}"</p>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563c8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0">${(t.name||'C')[0]}</div>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:#0a1628">${t.name}</div>
+          <div style="font-size:11px;color:#94a3b8">${t.role||''}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── ENQUIRY ──
+function sendEnquiry(name, price) {
+  const wa  = SITE.whatsapp || '912212345678';
+  const msg = encodeURIComponent(`Hello! I am interested in *${name}*${price?' ('+price+')':''}. Please send more details.`);
+  window.open(`https://wa.me/${wa}?text=${msg}`, '_blank');
+}
+
+// ── ADD SHIMMER ANIMATION ──
+const st = document.createElement('style');
+st.textContent = '@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.reveal{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}.reveal.visible{opacity:1;transform:translateY(0)}.page-btn{width:36px;height:36px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}.page-btn:hover{border-color:#2563c8;color:#2563c8}.page-btn.active{background:#2563c8;border-color:#2563c8;color:#fff}.page-btn:disabled{opacity:.35;cursor:not-allowed}';
+document.head.appendChild(st);
+
+// ── START ──
 initSite();
-document.addEventListener('DOMContentLoaded',function(){twemojify(document.body);revealNow(document.body);});
 </script>
 </body>
 </html>

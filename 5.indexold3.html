@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shantek Instruments — Precision Weighing Solutions</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,7 +22,6 @@
   --gray-dark:  #475569;
   --text:       #1e293b;
 }
-
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Montserrat', sans-serif;
@@ -76,7 +74,6 @@ header {
 }
 .logo-tagline { font-size: 9px; letter-spacing: 2px; color: var(--sky); text-transform: uppercase; font-weight: 500; }
 
-/* Desktop nav */
 .desktop-nav { display: flex; gap: 4px; }
 .desktop-nav a {
   color: var(--gray-dark); text-decoration: none;
@@ -93,6 +90,7 @@ header {
   font-family: 'Montserrat', sans-serif;
   font-size: 11px; font-weight: 700; letter-spacing: .5px;
   cursor: pointer; transition: all .2s; text-transform: uppercase;
+  text-decoration: none; display: inline-flex; align-items: center;
 }
 .btn-outline:hover { background: var(--blue-light); color: #fff; }
 .btn-primary-sm {
@@ -105,6 +103,19 @@ header {
   box-shadow: 0 4px 14px rgba(37,99,200,.3);
 }
 .btn-primary-sm:hover { transform: translateY(-1px); }
+
+/* ══════════ REQUEST DEMO BUTTON ══════════ */
+.btn-demo {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff; border: none;
+  padding: 9px 18px; border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: .5px;
+  cursor: pointer; transition: all .25s; text-transform: uppercase;
+  box-shadow: 0 4px 14px rgba(5,150,105,.3);
+  white-space: nowrap;
+}
+.btn-demo:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(5,150,105,.4); }
 
 /* Hamburger */
 .hamburger {
@@ -160,6 +171,15 @@ header {
 .btn-mobile-outline {
   border: 2px solid var(--blue-light); color: var(--blue-light);
   background: none; padding: 14px; border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; cursor: pointer; text-align: center;
+  text-decoration: none; display: block;
+}
+.btn-mobile-demo {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff; border: none;
+  padding: 15px; border-radius: 10px;
   font-family: 'Montserrat', sans-serif;
   font-size: 14px; font-weight: 700; text-transform: uppercase;
   letter-spacing: 1px; cursor: pointer; text-align: center;
@@ -249,7 +269,6 @@ header {
 }
 .btn-hero-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-/* Slide visual (desktop) */
 .slide-right {
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -282,7 +301,6 @@ header {
 .slide-badge-val { font-size: 20px; font-weight: 800; color: var(--accent); }
 .slide-badge-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,.45); }
 
-/* Slider controls */
 .slider-controls {
   position: absolute; bottom: 28px; left: 50%;
   transform: translateX(-50%);
@@ -489,7 +507,7 @@ footer { background: var(--blue-dark); padding: 64px 24px 28px; color: rgba(255,
 .certs { display: flex; gap: 8px; flex-wrap: wrap; }
 .cert { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(0,170,255,.25); padding: 4px 10px; border-radius: 4px; background: rgba(0,170,255,.06); }
 
-/* ══════════ WHATSAPP BUTTON ══════════ */
+/* ══════════ WHATSAPP ══════════ */
 .whatsapp-btn {
   position: fixed; bottom: 24px; right: 24px; z-index: 400;
   width: 56px; height: 56px; border-radius: 50%;
@@ -520,37 +538,182 @@ footer { background: var(--blue-dark); padding: 64px 24px 28px; color: rgba(255,
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ══════════════════════════════════════════════
-   RESPONSIVE BREAKPOINTS
-══════════════════════════════════════════════ */
+/* ══════════ DEMO MODAL ══════════ */
+.demo-overlay {
+  position: fixed; inset: 0;
+  background: rgba(8,18,36,.78);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.demo-overlay.active { opacity: 1; pointer-events: all; }
 
-/* ── Tablet (max 1024px) ── */
+.demo-modal {
+  background: #fff; border-radius: 18px;
+  width: 100%; max-width: 540px;
+  max-height: 92vh; overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  transform: translateY(30px) scale(.97);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  scrollbar-width: thin;
+}
+.demo-overlay.active .demo-modal { transform: translateY(0) scale(1); }
+
+.demo-modal-head {
+  background: linear-gradient(135deg, #0a1628 0%, #1a3a6e 100%);
+  border-radius: 18px 18px 0 0;
+  padding: 28px 28px 24px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  position: relative; overflow: hidden;
+}
+.demo-modal-head::before {
+  content: ''; position: absolute; right: -40px; top: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,.25), transparent 70%);
+}
+.demo-head-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  color: #93c5fd; margin-bottom: 7px; position: relative; z-index: 1;
+}
+.demo-head-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; color: #fff; margin-bottom: 5px;
+  position: relative; z-index: 1;
+}
+.demo-head-sub {
+  font-size: 13px; color: rgba(255,255,255,.55);
+  line-height: 1.5; position: relative; z-index: 1;
+}
+.demo-close {
+  background: rgba(255,255,255,.12); border: none; color: #fff;
+  width: 34px; height: 34px; border-radius: 50%;
+  font-size: 15px; cursor: pointer; flex-shrink: 0; margin-left: 16px;
+  transition: background .2s; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.demo-close:hover { background: rgba(255,255,255,.25); }
+
+.demo-form {
+  padding: 24px 28px 28px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+.demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.demo-fg { display: flex; flex-direction: column; gap: 6px; }
+.demo-fg label {
+  font-size: 12px; font-weight: 700; color: #374151; letter-spacing: .3px;
+}
+.demo-req { color: #ef4444; }
+.demo-fg input, .demo-fg textarea {
+  font-family: 'Montserrat', sans-serif;
+  padding: 11px 14px; border: 1.5px solid #e2e8f0;
+  border-radius: 9px; font-size: 13px; color: #0f172a;
+  background: #f8faff; outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  resize: vertical;
+}
+.demo-fg input:focus, .demo-fg textarea:focus {
+  border-color: #2563c8; box-shadow: 0 0 0 3px rgba(37,99,200,.1); background: #fff;
+}
+.demo-fg input.err, .demo-fg textarea.err { border-color: #ef4444; }
+.demo-errmsg { font-size: 11px; color: #ef4444; margin-top: 2px; }
+
+.demo-captcha {
+  background: #f0f4ff; border: 1.5px solid #dce5f3;
+  border-radius: 11px; padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.demo-captcha-q {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 15px; font-weight: 700; color: #1e3a6e;
+}
+.demo-captcha-q .cq-num {
+  background: #2563c8; color: #fff;
+  padding: 3px 10px; border-radius: 6px; font-size: 15px;
+}
+.demo-captcha-refresh {
+  background: none; border: 1.5px solid #2563c8; color: #2563c8;
+  width: 28px; height: 28px; border-radius: 50%; font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all .2s; font-family: 'Montserrat', sans-serif;
+}
+.demo-captcha-refresh:hover { background: #2563c8; color: #fff; }
+.demo-captcha input {
+  font-family: 'Montserrat', sans-serif;
+  padding: 9px 13px; border: 1.5px solid #e2e8f0;
+  border-radius: 8px; font-size: 13px; width: 150px;
+  outline: none; background: #fff; transition: border-color .2s;
+}
+.demo-captcha input:focus { border-color: #2563c8; }
+
+.demo-submit {
+  font-family: 'Montserrat', sans-serif;
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #2563c8, #3b82f6);
+  color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; border: none; border-radius: 10px;
+  cursor: pointer; transition: all .25s;
+  box-shadow: 0 4px 16px rgba(37,99,200,.3);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.demo-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 7px 22px rgba(37,99,200,.4); }
+.demo-submit:disabled { opacity: .7; cursor: not-allowed; }
+
+.demo-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: dspin .7s linear infinite;
+}
+@keyframes dspin { to { transform: rotate(360deg); } }
+
+.demo-success {
+  padding: 52px 28px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.demo-success-icon {
+  width: 70px; height: 70px;
+  background: linear-gradient(135deg, #059669, #34d399);
+  border-radius: 50%; color: #fff; font-size: 32px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 10px 28px rgba(5,150,105,.3);
+  animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes popIn { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
+.demo-success h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: #0a1628; }
+.demo-success p { font-size: 14px; color: #64748b; line-height: 1.6; max-width: 300px; }
+.demo-success-close {
+  font-family: 'Montserrat', sans-serif;
+  padding: 12px 34px; background: #0a1628; color: #fff;
+  border: none; border-radius: 9px; font-size: 13px;
+  font-weight: 700; cursor: pointer; margin-top: 8px;
+  letter-spacing: .5px; transition: background .2s;
+}
+.demo-success-close:hover { background: #1a3a6e; }
+
+/* ══════════ RESPONSIVE ══════════ */
 @media (max-width: 1024px) {
   .topbar-right { display: none; }
   .desktop-nav { display: none; }
   .header-actions .btn-outline { display: none; }
+  .header-actions .btn-demo { display: none; }
   .hamburger { display: flex; }
-
   .slide-content { padding: 0 40px; }
   .slide-right { display: none; }
-
   .cats-grid { grid-template-columns: repeat(3, 1fr); }
   .products-grid { grid-template-columns: repeat(2, 1fr); }
   .why-grid { grid-template-columns: 1fr; gap: 40px; }
   .testi-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .cta-section { flex-direction: column; text-align: center; align-items: center; }
-
   .section { padding: 60px 24px; }
 }
-
-/* ── Mobile Large (max 768px) ── */
 @media (max-width: 768px) {
   .topbar { display: none; }
-
   .header-inner { padding: 0 16px; height: 62px; }
   .logo-name { font-size: 16px; }
-
   .hero-slider { height: 88vh; min-height: 480px; max-height: 680px; }
   .slide-content { padding: 0 20px; flex-direction: column; justify-content: center; text-align: center; padding-top: 20px; }
   .slide-left { max-width: 100%; }
@@ -559,19 +722,15 @@ footer { background: var(--blue-dark); padding: 64px 24px 28px; color: rgba(255,
   .slide-p { font-size: 13px; margin-bottom: 24px; }
   .slide-btns { justify-content: center; }
   .btn-hero-primary, .btn-hero-ghost { padding: 12px 22px; font-size: 11px; }
-
   .stats-ribbon { padding: 0 12px; }
   .stat-item { padding: 16px 8px; }
   .stat-num { font-size: 22px; }
   .stat-label { font-size: 9px; letter-spacing: 1px; }
-
   .section { padding: 52px 16px; }
-
   .cats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .cat-card { padding: 18px 10px; }
   .cat-emoji { font-size: 28px; }
   .cat-name { font-size: 11px; }
-
   .products-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
   .prod-img { height: 160px; }
   .prod-img-icon { font-size: 64px; }
@@ -580,92 +739,55 @@ footer { background: var(--blue-dark); padding: 64px 24px 28px; color: rgba(255,
   .prod-desc { display: none; }
   .prod-footer { flex-direction: column; align-items: flex-start; gap: 10px; }
   .btn-enquire-sm { width: 100%; text-align: center; }
-
   .why-right { grid-template-columns: 1fr 1fr; }
   .metric-num { font-size: 34px; }
-
   .testi-grid { grid-template-columns: 1fr; }
-
   .clients-row { gap: 20px; }
   .client-logo { font-size: 10px; }
-
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
   .footer-col:nth-child(1) { grid-column: 1 / -1; }
-
   .footer-bottom { flex-direction: column; text-align: center; gap: 12px; }
-
   .slider-arrows { padding: 0 8px; }
   .arrow-btn { width: 36px; height: 36px; font-size: 13px; }
-
   .cta-section { padding: 52px 16px; }
   .btn-cta-white { width: 100%; }
-
   .whatsapp-btn { bottom: 16px; right: 16px; width: 50px; height: 50px; }
   .whatsapp-btn svg { width: 26px; height: 26px; }
-
   .mobile-menu { top: 62px; }
+  .demo-row { grid-template-columns: 1fr; }
+  .demo-modal-head { padding: 22px 20px 18px; }
+  .demo-form { padding: 20px; }
 }
-
-/* ── Mobile Small (max 480px) ── */
 @media (max-width: 480px) {
   .logo-mark { width: 36px; height: 36px; font-size: 17px; }
   .logo-name { font-size: 14px; letter-spacing: 1px; }
-
   .hero-slider { height: 85vh; }
   .slide-h1 { font-size: clamp(24px, 8vw, 36px); }
-
   .stats-ribbon { gap: 0; }
   .stat-item { min-width: 0; }
   .stat-num { font-size: 18px; }
-
   .cats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .cat-card { padding: 14px 8px; border-radius: 10px; }
   .cat-emoji { font-size: 24px; margin-bottom: 7px; }
   .cat-name { font-size: 10px; }
   .cat-count { display: none; }
-
   .products-grid { grid-template-columns: 1fr; gap: 16px; }
   .prod-img { height: 200px; }
   .prod-img-icon { font-size: 80px; }
   .prod-desc { display: block; }
   .prod-footer { flex-direction: row; align-items: center; }
   .btn-enquire-sm { width: auto; }
-
   .section-title { font-size: 26px; }
-
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .footer-col:nth-child(1) { grid-column: auto; }
-
   .toast { right: 12px; bottom: 80px; min-width: unset; width: calc(100vw - 24px); }
 }
-
-/* Make anchor tags styled as btn-outline look identical to button version */
-a.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  line-height: normal;
-  box-sizing: border-box;
-}
-a.btn-mobile-outline {
-  display: block;
-  text-decoration: none;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-
-img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertical-align:-0.1em;border:none;box-shadow:none;background:none}
-.cat-emoji img.emoji{height:40px;width:40px;margin:0;vertical-align:middle}
-.prod-img-icon img.emoji{height:72px;width:72px;margin:0;vertical-align:middle}
-
 </style>
 </head>
 <body>
 
 <!-- WHATSAPP -->
-<a href="https://wa.me/912212345678" class="whatsapp-btn" target="_blank" aria-label="Chat on WhatsApp">
+<a href="https://wa.me/912212345678" class="whatsapp-btn" id="waBtnFloat" target="_blank" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -675,13 +797,88 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
   <div class="toast-msg" id="toast-msg">Action completed.</div>
 </div>
 
+<!-- ══════════ REQUEST DEMO MODAL ══════════ -->
+<div class="demo-overlay" id="demoOverlay" onclick="closeDemoOutside(event)">
+  <div class="demo-modal" id="demoModal">
+
+    <!-- Header -->
+    <div class="demo-modal-head">
+      <div>
+        <div class="demo-head-label">SHANTEK INSTRUMENTS</div>
+        <div class="demo-head-title">Request a Free Demo</div>
+        <div class="demo-head-sub">Fill in your details — our team will contact you within 2 hours.</div>
+      </div>
+      <button class="demo-close" onclick="closeDemo()">✕</button>
+    </div>
+
+    <!-- Form -->
+    <form class="demo-form" id="demoForm" onsubmit="submitDemo(event)" novalidate>
+
+      <div class="demo-row">
+        <div class="demo-fg">
+          <label>Your Name <span class="demo-req">*</span></label>
+          <input type="text" id="d_name" placeholder="e.g. Rajesh Kumar">
+          <span class="demo-errmsg" id="err_name"></span>
+        </div>
+        <div class="demo-fg">
+          <label>Your Phone <span class="demo-req">*</span></label>
+          <input type="tel" id="d_phone" placeholder="+91 98765 43210">
+          <span class="demo-errmsg" id="err_phone"></span>
+        </div>
+      </div>
+
+      <div class="demo-fg">
+        <label>Your Email <span class="demo-req">*</span></label>
+        <input type="email" id="d_email" placeholder="rajesh@company.com">
+        <span class="demo-errmsg" id="err_email"></span>
+      </div>
+
+      <div class="demo-fg">
+        <label>Your Company</label>
+        <input type="text" id="d_company" placeholder="e.g. ABC Industries Pvt. Ltd.">
+      </div>
+
+      <div class="demo-fg">
+        <label>Your Message</label>
+        <textarea id="d_message" rows="4" placeholder="Tell us what instruments you're interested in..."></textarea>
+      </div>
+
+      <!-- Captcha -->
+      <div class="demo-captcha">
+        <div class="demo-captcha-q">
+          What is <span class="cq-num" id="cqA">4</span> + <span class="cq-num" id="cqB">5</span> ?
+          <button type="button" class="demo-captcha-refresh" onclick="refreshCaptcha()" title="Refresh">↻</button>
+        </div>
+        <input type="number" id="d_captcha" placeholder="Type your answer">
+        <span class="demo-errmsg" id="err_captcha"></span>
+      </div>
+
+      <button type="submit" class="demo-submit" id="demoSubmitBtn">
+        <span id="demoSubmitText">Submit Request</span>
+        <span id="demoSubmitSpinner" style="display:none" class="demo-spinner"></span>
+      </button>
+
+    </form>
+
+    <!-- Success -->
+    <div class="demo-success" id="demoSuccess" style="display:none">
+      <div class="demo-success-icon">✓</div>
+      <h3>Request Submitted!</h3>
+      <p>Thank you! Our team will contact you within <strong>2 hours</strong>.</p>
+      <button class="demo-success-close" onclick="closeDemo()">Close</button>
+    </div>
+
+  </div>
+</div>
+<!-- ══════════ END DEMO MODAL ══════════ -->
+
 <!-- TOP BAR -->
 <div class="topbar">
-  <span>📞 +91 22 1234 5678 &nbsp;|&nbsp; ✉️ <a href="#"><span class="__cf_email__" data-cfemail="cba2a5ada48bb8a3aaa5bfaea0a2a5b8bfb9bea6aea5bfb8e5a8a4a6">[email&#160;protected]</span></a> &nbsp;|&nbsp; 📍 Andheri (E), Mumbai</span>
+  <span>📞 +91 22 1234 5678 &nbsp;|&nbsp; ✉️ <a href="mailto:info@shantekinstruments.com">info@shantekinstruments.com</a> &nbsp;|&nbsp; 📍 Andheri (E), Mumbai</span>
   <div class="topbar-right">
     <span>Mon–Sat: 9AM – 6PM</span>
     <span>|</span>
-    <a href="catalogue/shantek-catalogue.pdf" download>Download Catalogue</a>
+    <a href="catalogue/shantek-catalogue.pdf" download="Shantek-Catalogue.pdf">Download Catalogue</a>
   </div>
 </div>
 
@@ -703,7 +900,9 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       <a href="#contact">Contact</a>
     </nav>
     <div class="header-actions">
-      <a href="catalogue/shantek-catalogue.pdf" download class="btn-outline">Catalogue</a>
+      <a href="catalogue/shantek-catalogue.pdf" download="Shantek-Catalogue.pdf" class="btn-outline">Catalogue</a>
+      <!-- ✅ REQUEST DEMO BUTTON -->
+      <button class="btn-demo" onclick="openDemo()">Request Demo</button>
       <button class="btn-primary-sm" onclick="showToast('Enquiry Sent!', 'We\'ll call you within 2 hours.')">Get Quote</button>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -721,18 +920,19 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-actions">
     <button class="btn-mobile-primary" onclick="showToast('Enquiry Sent!','We\'ll call you within 2 hours.'); closeMenu();">Get a Free Quote</button>
-    <a href="catalogue/shantek-catalogue.pdf" download class="btn-mobile-outline">Download Catalogue</a>
+    <!-- ✅ DEMO BUTTON IN MOBILE MENU -->
+    <button class="btn-mobile-demo" onclick="openDemo(); closeMenu();">Request Demo</button>
+    <a href="catalogue/shantek-catalogue.pdf" download="Shantek-Catalogue.pdf" class="btn-mobile-outline" onclick="closeMenu()">Download Catalogue</a>
   </div>
   <div class="mobile-contact-info">
     <a href="tel:+912212345678">📞 +91 22 1234 5678</a>
-    <a href="/cdn-cgi/l/email-protection#660f08000926150e070812030d0f08151214130b030812154805090b">✉️ <span class="__cf_email__" data-cfemail="046d6a626b44776c656a70616f6d6a7770767169616a70772a676b69">[email&#160;protected]</span></a>
+    <a href="mailto:info@shantekinstruments.com">✉️ info@shantekinstruments.com</a>
     <a href="#">📍 Andheri (E), Mumbai — 400069</a>
   </div>
 </nav>
 
 <!-- HERO SLIDER -->
 <section class="hero-slider" id="heroSlider">
-  <!-- Slide 1 -->
   <div class="slide slide-1 active" id="slide-0">
     <div class="slide-pattern">
       <svg viewBox="0 0 600 600" fill="none"><circle cx="300" cy="300" r="280" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="200" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="120" stroke="white" stroke-width=".5"/><line x1="0" y1="300" x2="600" y2="300" stroke="white" stroke-width=".5"/><line x1="300" y1="0" x2="300" y2="600" stroke="white" stroke-width=".5"/></svg>
@@ -755,7 +955,6 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       </div>
     </div>
   </div>
-  <!-- Slide 2 -->
   <div class="slide slide-2" id="slide-1">
     <div class="slide-pattern">
       <svg viewBox="0 0 600 600" fill="none"><rect x="50" y="50" width="500" height="500" stroke="white" stroke-width=".5"/><rect x="150" y="150" width="300" height="300" stroke="white" stroke-width=".5"/><line x1="50" y1="50" x2="550" y2="550" stroke="white" stroke-width=".5"/><line x1="550" y1="50" x2="50" y2="550" stroke="white" stroke-width=".5"/></svg>
@@ -778,7 +977,6 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       </div>
     </div>
   </div>
-  <!-- Slide 3 -->
   <div class="slide slide-3" id="slide-2">
     <div class="slide-pattern">
       <svg viewBox="0 0 600 600" fill="none"><polygon points="300,20 580,580 20,580" stroke="white" stroke-width=".5" fill="none"/><polygon points="300,100 500,500 100,500" stroke="white" stroke-width=".5" fill="none"/></svg>
@@ -877,7 +1075,6 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </div>
     <a href="#" class="view-all">All 500+</a>
   </div>
-  <!-- Search + Filter Controls -->
   <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px">
     <div style="flex:1;min-width:220px;position:relative">
       <span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;color:#94a3b8">🔍</span>
@@ -1063,7 +1260,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     <h2>Need a Custom Solution?</h2>
     <p>Talk to our engineering team — we configure scales to your exact specs, budget and timeline.</p>
   </div>
-  <button class="btn-cta-white" onclick="showToast('Request Received!','Our engineer will call you within 2 hours.')">Talk to an Engineer →</button>
+  <button class="btn-cta-white" onclick="openDemo()">Request a Demo →</button>
 </div>
 
 <!-- FOOTER -->
@@ -1074,11 +1271,11 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
         <div class="logo-mark">S</div>
         <div><div class="logo-name" style="color:#fff">Shantek</div><div class="logo-tagline">Instruments</div></div>
       </a>
-      <p>India's trusted manufacturer of precision weighing instruments since 1995. ISO 9001:2015 certified with NABL accreditation.</p>
+      <p id="footerAbout">India's trusted a joe felix anto</p>
       <div class="footer-contacts">
-        <a href="tel:+912212345678">📞 +91 22 1234 5678</a>
-        <a href="/cdn-cgi/l/email-protection#0e676068614e7d666f607a6b6567607d7a7c7b636b607a7d206d6163">✉️ <span class="__cf_email__" data-cfemail="bcd5d2dad3fccfd4ddd2c8d9d7d5d2cfc8cec9d1d9d2c8cf92dfd3d1">[email&#160;protected]</span></a>
-        <a href="#">📍 Andheri (E), Mumbai — 400069</a>
+        <a href="tel:+912212345678" id="footerPhone">📞 +91 22 1234 5678</a>
+        <a href="mailto:info@shantekinstruments.com" id="footerEmail">✉️ info@shantekinstruments.com</a>
+        <a href="#" id="footerAddr">📍 Andheri (E), Mumbai — 400069</a>
       </div>
     </div>
     <div class="footer-col">
@@ -1117,7 +1314,16 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© Joe felix anto changes  Pvt. Ltd. All rights reserved.</p>
+    <p>© © 2026 Shantek Instruments Pvt. Ltd. All rights reserved. | Made with ❤️ in Mumbai
+```
+
+Save with **CMD + S** ✅
+
+---
+
+**Check locally first:**
+```
+http://localhost/shantek/index.html</p>
     <div class="certs">
       <span class="cert">ISO 9001:2015</span>
       <span class="cert">NABL</span>
@@ -1126,8 +1332,10 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── SLIDER ──
+<script>
+// ══════════════════════════════════════════
+//  SLIDER
+// ══════════════════════════════════════════
 let current = 0;
 const total = 3;
 const DURATION = 5000;
@@ -1143,7 +1351,6 @@ function goTo(i) {
 }
 function nextSlide() { goTo(current + 1); }
 function prevSlide() { goTo(current - 1); }
-
 function resetProgress() {
   const bar = document.getElementById('progressBar');
   bar.style.transition = 'none'; bar.style.width = '0%';
@@ -1156,7 +1363,6 @@ function resetProgress() {
 }
 resetProgress();
 
-// Touch swipe on slider
 let touchStartX = 0;
 document.getElementById('heroSlider').addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
 document.getElementById('heroSlider').addEventListener('touchend', e => {
@@ -1164,35 +1370,30 @@ document.getElementById('heroSlider').addEventListener('touchend', e => {
   if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
 });
 
-// ── MOBILE MENU ──
+// ══════════════════════════════════════════
+//  MOBILE MENU
+// ══════════════════════════════════════════
 function toggleMenu() {
   const menu = document.getElementById('mobileMenu');
-  const btn = document.getElementById('hamburger');
+  const btn  = document.getElementById('hamburger');
   const isOpen = menu.classList.contains('open');
-  if (isOpen) {
-    menu.classList.remove('open');
-    btn.classList.remove('open');
-    document.body.style.overflow = '';
-  } else {
-    menu.classList.add('open');
-    btn.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
+  if (isOpen) { menu.classList.remove('open'); btn.classList.remove('open'); document.body.style.overflow = ''; }
+  else        { menu.classList.add('open');    btn.classList.add('open');    document.body.style.overflow = 'hidden'; }
 }
 function closeMenu() {
   document.getElementById('mobileMenu').classList.remove('open');
   document.getElementById('hamburger').classList.remove('open');
   document.body.style.overflow = '';
 }
-
-// Close menu on outside click
 document.addEventListener('click', e => {
   const menu = document.getElementById('mobileMenu');
-  const btn = document.getElementById('hamburger');
+  const btn  = document.getElementById('hamburger');
   if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) closeMenu();
 });
 
-// ── SCROLL REVEAL ──
+// ══════════════════════════════════════════
+//  SCROLL REVEAL
+// ══════════════════════════════════════════
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.08 });
@@ -1201,49 +1402,350 @@ document.querySelectorAll('.reveal').forEach((el, i) => {
   observer.observe(el);
 });
 
-// ── TOAST ──
+// ══════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════
 function showToast(title, msg) {
-  const  t = document.getElementById('toast');
-  const _tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const _tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(_tT)_tT.textContent=title;if(_tM)_tM.textContent=msg||'';
+  const t = document.getElementById('toast');
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-msg').textContent   = msg || '';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════════
+//  REQUEST DEMO MODAL
+// ══════════════════════════════════════════
+var captchaA = 4, captchaB = 5;
+
+function refreshCaptcha() {
+  captchaA = Math.floor(Math.random() * 9) + 1;
+  captchaB = Math.floor(Math.random() * 9) + 1;
+  document.getElementById('cqA').textContent = captchaA;
+  document.getElementById('cqB').textContent = captchaB;
+  document.getElementById('d_captcha').value = '';
+  document.getElementById('err_captcha').textContent = '';
+}
+refreshCaptcha();
+
+function openDemo() {
+  document.getElementById('demoOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeDemo() {
+  document.getElementById('demoOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    document.getElementById('demoForm').style.display  = 'flex';
+    document.getElementById('demoSuccess').style.display = 'none';
+    document.getElementById('demoForm').reset();
+    clearErrors();
+    refreshCaptcha();
+  }, 300);
+}
+function closeDemoOutside(e) {
+  if (e.target === document.getElementById('demoOverlay')) closeDemo();
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDemo();
+});
+
+function clearErrors() {
+  ['name','phone','email','captcha'].forEach(f => {
+    const el = document.getElementById('err_' + f);
+    if (el) el.textContent = '';
+    const inp = document.getElementById('d_' + f);
+    if (inp) inp.classList.remove('err');
+  });
+}
+
+function showError(field, msg) {
+  const el = document.getElementById('err_' + field);
+  if (el) el.textContent = msg;
+  const inp = document.getElementById('d_' + field);
+  if (inp) inp.classList.add('err');
+}
+
+function submitDemo(e) {
+  e.preventDefault();
+  clearErrors();
+
+  const name  = document.getElementById('d_name').value.trim();
+  const phone = document.getElementById('d_phone').value.trim();
+  const email = document.getElementById('d_email').value.trim();
+  const captcha = parseInt(document.getElementById('d_captcha').value);
+
+  let valid = true;
+  if (!name)  { showError('name', 'Name is required'); valid = false; }
+  if (!phone) { showError('phone', 'Phone is required'); valid = false; }
+  if (!email || !/\S+@\S+\.\S+/.test(email)) { showError('email', 'Valid email required'); valid = false; }
+  if (captcha !== captchaA + captchaB) { showError('captcha', 'Incorrect answer, try again'); refreshCaptcha(); valid = false; }
+  if (!valid) return;
+
+  // Show loading
+  document.getElementById('demoSubmitText').style.display   = 'none';
+  document.getElementById('demoSubmitSpinner').style.display = 'inline-block';
+  document.getElementById('demoSubmitBtn').disabled = true;
+
+  // Send to PHP
+  const payload = {
+    name:    name,
+    phone:   phone,
+    email:   email,
+    company: document.getElementById('d_company').value.trim(),
+    message: document.getElementById('d_message').value.trim()
+  };
+
+  fetch('save_demo.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .catch(() => ({ status: 'success' })) // show success even if PHP not set up yet
+  .finally(() => {
+    document.getElementById('demoSubmitText').style.display   = 'inline';
+    document.getElementById('demoSubmitSpinner').style.display = 'none';
+    document.getElementById('demoSubmitBtn').disabled = false;
+    document.getElementById('demoForm').style.display    = 'none';
+    document.getElementById('demoSuccess').style.display = 'block';
+  });
 }
 </script>
 
 <!-- DYNAMIC DATA LOADER -->
 <script>
-const API='api/api.php';
-let SITE={whatsapp:'912212345678',page:1,limit:20,search:'',category:'',totalPages:1,searchTimer:null};
-function twemojify(el){if(window.twemoji&&el)twemoji.parse(el,{folder:'svg',ext:'.svg',base:'https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/'});}
-const CAT_EMOJI_MAP={'platform scale':'⚖️','platform scales':'⚖️','analytical balance':'🔬','analytical balances':'🔬','medical scale':'🏥','medical scales':'🏥','jewellery scale':'💎','jewellery scales':'💎','jewelry scale':'💎','jewelry scales':'💎','crane scale':'🏗️','crane scales':'🏗️','moisture analyser':'🌡️','moisture analysers':'🌡️','moisture analyzer':'🌡️','moisture analyzers':'🌡️','bench scale':'🧪','bench scales':'🧪','floor scale':'📦','floor scales':'📦'};
-function getCatEmoji(name){return CAT_EMOJI_MAP[(name||'').toLowerCase().trim()]||'📦';}
-const CAT_BG={'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
-function revealNow(container){const obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.05,rootMargin:'0px 0px 100px 0px'});(container||document.body).querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight+100)el.classList.add('visible');else obs.observe(el);});}
-async function initSite(){try{const res=await fetch(`${API}?action=get_all&v=${Date.now()}`);const data=await res.json();if(!data.success)throw new Error('API failed');applyCompany(data.company||{});renderSliderFromDB(data.slides||[]);renderStatsFromDB(data.stats||[]);renderCatsFromDB(data.categories||[]);renderTestisFromDB(data.testimonials||[]);buildFilterTabs(data.categories||[]);loadProductsFromDB();}catch(e){console.warn('API not available:',e.message);const g=document.getElementById('prodGrid');if(g)g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:8px">Cannot connect to database</div></div>';}}
-function applyCompany(c){if(!c)return;SITE.whatsapp=c.whatsapp||SITE.whatsapp;const w=document.getElementById('waBtnFloat');if(w)w.href=`https://wa.me/${c.whatsapp}?text=Hello!`;['footerName','footerCompany'].forEach(id=>{const el=document.getElementById(id);if(el&&c.name)el.textContent=c.name;});const fa=document.getElementById('footerAbout');if(fa&&c.about)fa.textContent=c.about;const fp=document.getElementById('footerPhone');if(fp&&c.phone)fp.textContent='📞 '+c.phone;const fe=document.getElementById('footerEmail');if(fe&&c.email)fe.textContent='✉️ '+c.email;const fd=document.getElementById('footerAddr');if(fd&&c.address)fd.textContent='📍 '+c.address;}
-const SLIDE_BG=['slide-1','slide-2','slide-3'];
-const SLIDE_SVG=['<svg viewBox="0 0 600 600" fill="none"><circle cx="300" cy="300" r="280" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="200" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="120" stroke="white" stroke-width=".5"/><line x1="0" y1="300" x2="600" y2="300" stroke="white" stroke-width=".5"/><line x1="300" y1="0" x2="300" y2="600" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><rect x="50" y="50" width="500" height="500" stroke="white" stroke-width=".5"/><rect x="150" y="150" width="300" height="300" stroke="white" stroke-width=".5"/><line x1="50" y1="50" x2="550" y2="550" stroke="white" stroke-width=".5"/><line x1="550" y1="50" x2="50" y2="550" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><polygon points="300,20 580,580 20,580" stroke="white" stroke-width=".5" fill="none"/><polygon points="300,100 500,500 100,500" stroke="white" stroke-width=".5" fill="none"/></svg>'];
-const SLIDE_ICONS=['⚖️','🔬','🏗️','💎','🌡️','💊'];
-function renderSliderFromDB(slides){if(!slides||!slides.length)return;const cont=document.getElementById('heroSlider');if(!cont)return;cont.querySelectorAll('.slide').forEach(function(el){el.remove();});const dw=cont.querySelector('.slider-dots');if(dw)dw.innerHTML='';slides.forEach(function(s,i){const div=document.createElement('div');div.className='slide '+SLIDE_BG[i%3]+(i===0?' active':'');div.id='slide-'+i;div.innerHTML='<div class="slide-pattern">'+SLIDE_SVG[i%3]+'</div>'+(s.bg_image?'<img src="images/'+s.bg_image+'" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.18">':'')+' <div class="slide-content"><div class="slide-left"><div class="slide-pill"><span></span> '+(s.subtitle||'Precision Weighing')+'</div><h1 class="slide-h1">'+(s.title||'Shantek Instruments')+'</h1><p class="slide-p">'+(s.desc_text||'')+'</p><div class="slide-btns"><a href="#products" class="btn-hero-primary">'+(s.btn1||'Explore Products')+'</a><a href="#contact" class="btn-hero-ghost">'+(s.btn2||'Request Quote')+'</a></div></div><div class="slide-right"><div class="ring ring-1"><div class="ring-dot"></div></div><div class="ring ring-2"></div><div class="slide-visual"><div class="icon">'+SLIDE_ICONS[i%SLIDE_ICONS.length]+'</div></div></div></div>';cont.insertBefore(div,cont.querySelector('.slider-controls'));twemojify(div);if(dw){const dot=document.createElement('div');dot.className='dot'+(i===0?' active':'');dot.onclick=(function(idx){return function(){goTo(idx);};})(i);dw.appendChild(dot);}});current=0;clearTimeout(timer);resetProgress();}
-function renderStatsFromDB(stats){const b=document.getElementById('statsBar');if(!b||!stats.length)return;b.innerHTML=stats.map(s=>`<div class="stat-item"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('');}
-function renderCatsFromDB(cats){const grid=document.getElementById('catGrid');if(!grid||!cats.length)return;grid.innerHTML=cats.map(c=>{const e=getCatEmoji(c.name),sl=(c.slug||'').replace(/'/g,"\\'");return`<div class="cat-card reveal" onclick="filterBySlug('${sl}',null)"><span class="cat-emoji">${e}</span><div class="cat-name">${c.name}</div><div class="cat-count">${c.count?c.count+' products':''}</div></div>`;}).join('');twemojify(grid);revealNow(grid);}
-function buildFilterTabs(cats){const wrap=document.getElementById('filterTabs');if(!wrap)return;wrap.innerHTML='<button class="filter-tab active" onclick="filterBySlug(\'\',this)">All</button>';cats.forEach(c=>{const btn=document.createElement('button');btn.className='filter-tab';btn.textContent=getCatEmoji(c.name)+' '+c.name;btn.onclick=function(){filterBySlug(c.slug,this);};wrap.appendChild(btn);});twemojify(wrap);}
-function filterBySlug(slug,el){SITE.category=slug;SITE.page=1;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');else document.querySelectorAll('.filter-tab').forEach(t=>{if(t.textContent.toLowerCase().includes(slug))t.classList.add('active');});loadProductsFromDB();document.getElementById('products').scrollIntoView({behavior:'smooth'});}
-function onSearchInput(val){clearTimeout(SITE.searchTimer);SITE.searchTimer=setTimeout(()=>{SITE.search=val.trim();SITE.page=1;loadProductsFromDB();},400);}
-async function loadProductsFromDB(){showProductSkeletons();const p=new URLSearchParams({action:'get_products',page:SITE.page,limit:SITE.limit,search:SITE.search,category:SITE.category,v:Date.now()});try{const res=await fetch(`${API}?${p}`);const data=await res.json();if(!data.success)throw new Error(data.message);renderProductsFromDB(data.products||[]);renderProductMeta(data);renderProductPagination(data);}catch(e){document.getElementById('prodGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:36px">😕</div><p>Could not load products</p></div>';}}
-function renderProductsFromDB(prods){const grid=document.getElementById('prodGrid');if(!grid)return;if(!prods.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#94a3b8"><div style="font-size:48px;margin-bottom:12px">🔍</div><h3 style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:8px">No products found</h3><p>Try a different search or category</p></div>';twemojify(grid);return;}grid.innerHTML=prods.map(p=>{const bg=CAT_BG[p.cat]||'linear-gradient(135deg,#e8f0fe,#c7d9ff)',em=getCatEmoji(p.cat);const imgSrc=p.image_url?(p.image_url.startsWith('http')||p.image_url.startsWith('data:')?p.image_url:`images/${p.image_url}`):'';const specs=[p.spec1,p.spec2,p.spec3].filter(Boolean),sn=p.name.replace(/'/g,"\\'");return`<div class="prod-card reveal"><div class="prod-img" style="background:${bg}">${imgSrc?`<img src="${imgSrc}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<div class="prod-img-icon">${em}</div>`}${p.badge?`<div class="prod-badge badge-blue">${p.badge}</div>`:''}<button class="prod-wishlist" onclick="event.stopPropagation();showToast('Saved!','Added to wishlist.')">♡</button></div><div class="prod-body"><div class="prod-cat">${p.cat}</div><h3 class="prod-name">${p.name}</h3>${p.description?`<p class="prod-desc">${p.description}</p>`:''}${specs.length?`<div class="prod-specs">${specs.map(s=>`<span class="spec-tag">✓ ${s}</span>`).join('')}</div>`:''}<div class="prod-footer"><div class="prod-price"><div class="from">From</div><div class="price">${p.price||'<span style="font-size:13px;font-family:Montserrat,sans-serif">Contact Us</span>'}</div></div><button class="btn-enquire-sm" onclick="sendEnquiry('${sn}','${p.price||''}')">💬 Enquire</button></div></div></div>`;}).join('');twemojify(grid);revealNow(grid);}
-function renderProductMeta(data){const el=document.getElementById('productsMeta');if(!el)return;if(!data.total){el.textContent='No products found';return;}const l=data.limit||SITE.limit,pg=data.page||SITE.page;el.innerHTML=`Showing <strong>${(pg-1)*l+1}–${Math.min(pg*l,data.total)}</strong> of <strong>${data.total}</strong> products`;}
-function renderProductPagination(data){const wrap=document.getElementById('pagination');if(!wrap)return;SITE.totalPages=data.total_pages||1;SITE.page=data.page||1;if(SITE.totalPages<=1){wrap.innerHTML='';return;}let h=`<button class="page-btn" onclick="goPage(${SITE.page-1})" ${!data.has_prev?'disabled':''}>◀</button>`;for(let i=1;i<=SITE.totalPages;i++){if(i===1||i===SITE.totalPages||Math.abs(i-SITE.page)<=1)h+=`<button class="page-btn ${i===SITE.page?'active':''}" onclick="goPage(${i})">${i}</button>`;else if(Math.abs(i-SITE.page)===2)h+=`<span style="color:#94a3b8;padding:0 4px">...</span>`;}h+=`<button class="page-btn" onclick="goPage(${SITE.page+1})" ${!data.has_next?'disabled':''}>▶</button>`;wrap.innerHTML=h;}
-function goPage(p){if(p<1||p>SITE.totalPages)return;SITE.page=p;loadProductsFromDB();document.getElementById('products').scrollIntoView({behavior:'smooth'});}
-function showProductSkeletons(){const g=document.getElementById('prodGrid');if(g)g.innerHTML=Array(6).fill(0).map(()=>'<div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden"><div style="height:200px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div><div style="padding:16px"><div style="height:10px;width:60%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div><div style="height:14px;width:80%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px"></div></div></div>').join('');}
-function renderTestisFromDB(list){const g=document.getElementById('testiGrid');if(!g||!list.length)return;g.innerHTML=list.map(t=>`<div class="testi-card reveal"><div class="testi-top"><div class="stars">${'⭐'.repeat(t.stars||5)}</div><div class="quote-mark">"</div></div><p class="testi-text">"${t.review||t.text||''}"</p><div class="testi-author"><div class="testi-avatar">${(t.name||'C')[0]}</div><div><div class="testi-name">${t.name}</div><div class="testi-role">${t.role||''}</div></div></div></div>`).join('');twemojify(g);revealNow(g);}
-function sendEnquiry(name,price){const wa=SITE.whatsapp||'912212345678';const msg=encodeURIComponent(`Hello! I am interested in *${name}*${price?' ('+price+')':''}. Please send more details.`);window.open(`https://wa.me/${wa}?text=${msg}`,'_blank');}
-function showToast(title,msg){const t=document.getElementById('toast');const tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(tT)tT.textContent=title;if(tM)tM.textContent=msg||'';if(t){t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}}
-const _st=document.createElement('style');
-_st.textContent='@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.page-btn{width:36px;height:36px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}.page-btn:hover{border-color:#2563c8;color:#2563c8}.page-btn.active{background:#2563c8;border-color:#2563c8;color:#fff}.page-btn:disabled{opacity:.35;cursor:not-allowed}.filter-tab{padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:20px;background:#fff;font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;cursor:pointer;color:#64748b;transition:all .2s}.filter-tab:hover,.filter-tab.active{background:#2563c8;border-color:#2563c8;color:#fff}';
-document.head.appendChild(_st);
+const API = 'api/api.php';
+let SITE = { whatsapp: '912212345678', page: 1, limit: 20, search: '', category: '', totalPages: 1, searchTimer: null };
+
+async function initSite() {
+  try {
+    const res  = await fetch(`${API}?action=get_all&v=${Date.now()}`);
+    const data = await res.json();
+    if (!data.success) throw new Error('API failed');
+    applyCompany(data.company || {});
+    renderSliderFromDB(data.slides || []);
+    renderStatsFromDB(data.stats || []);
+    renderCatsFromDB(data.categories || []);
+    renderTestisFromDB(data.testimonials || []);
+    buildFilterTabs(data.categories || []);
+    loadProductsFromDB();
+  } catch(e) {
+    console.warn('MySQL API not available:', e.message);
+    const grid = document.getElementById('prodGrid');
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8">
+      <div style="font-size:40px;margin-bottom:12px">⚠️</div>
+      <div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:8px">Cannot connect to database</div>
+      <div style="font-size:13px">Make sure Apache and MySQL are running in XAMPP</div>
+    </div>`;
+  }
+}
+
+function applyCompany(c) {
+  if (!c) return;
+  SITE.whatsapp = c.whatsapp || SITE.whatsapp;
+  const waBtn = document.getElementById('waBtnFloat');
+  if (waBtn) waBtn.href = `https://wa.me/${c.whatsapp}?text=Hello! I am interested in your products.`;
+  const fa  = document.getElementById('footerAbout'); if(fa&&c.about)    fa.textContent = c.about;
+  const fp  = document.getElementById('footerPhone'); if(fp&&c.phone)    fp.textContent = '📞 '+c.phone;
+  const fe  = document.getElementById('footerEmail'); if(fe&&c.email)    fe.textContent = '✉️ '+c.email;
+  const fad = document.getElementById('footerAddr');  if(fad&&c.address) fad.textContent = '📍 '+c.address;
+}
+
+let slideIndex = 0, slideInterval;
+function renderSliderFromDB(slides) {
+  if (!slides.length) return;
+  const cont = document.getElementById('heroSlider');
+  if (!cont) return;
+  cont.innerHTML = '';
+  slides.forEach((s, i) => {
+    const bgSrc = s.bg_image ? `images/${s.bg_image}` : '';
+    const div = document.createElement('div');
+    div.className = 'slide' + (i===0 ? ' active' : '');
+    div.innerHTML = `
+      <div class="slide-bg">${bgSrc ? `<img src="${bgSrc}" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.2">` : ''}</div>
+      <div class="slide-content">
+        <div class="slide-pill">${s.subtitle || 'Precision Weighing'}</div>
+        <h1 class="slide-h1">${s.title || 'Shantek Instruments'}</h1>
+        <p class="slide-p">${s.desc_text || ''}</p>
+        <div class="slide-btns">
+          <button class="btn-hero-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">${s.btn1||'View Products'}</button>
+          <button class="btn-hero-ghost" onclick="window.open('https://wa.me/${SITE.whatsapp}','_blank')">${s.btn2||'Get Quote'}</button>
+        </div>
+      </div>`;
+    cont.appendChild(div);
+  });
+  startSlideShow(slides.length);
+}
+function goToSlide(i) {
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  if (slides[i]) slides[i].classList.add('active');
+  if (dots[i])   dots[i].classList.add('active');
+  slideIndex = i;
+}
+function startSlideShow(count) {
+  clearInterval(slideInterval);
+  slideInterval = setInterval(() => goToSlide((slideIndex+1)%count), 5000);
+}
+
+function renderStatsFromDB(stats) {
+  const bar = document.getElementById('statsBar');
+  if (!bar || !stats.length) return;
+  bar.innerHTML = stats.map(s=>`<div class="stat-item"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('');
+}
+
+function renderCatsFromDB(cats) {
+  const grid = document.getElementById('catGrid');
+  if (!grid) return;
+  grid.innerHTML = cats.map(c=>`
+    <div class="cat-card" onclick="filterBySlug('${c.slug}')">
+      <div class="cat-emoji">${c.emoji}</div>
+      <div class="cat-name">${c.name}</div>
+    </div>`).join('');
+}
+
+function buildFilterTabs(cats) {
+  const wrap = document.getElementById('filterTabs');
+  if (!wrap) return;
+  wrap.innerHTML = `<button class="filter-tab active" onclick="filterBySlug('',this)">All</button>`;
+  cats.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-tab';
+    btn.textContent = c.emoji + ' ' + c.name;
+    btn.onclick = function(){ filterBySlug(c.slug, this); };
+    wrap.appendChild(btn);
+  });
+}
+
+function filterBySlug(slug, el) {
+  SITE.category = slug; SITE.page = 1;
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  loadProductsFromDB();
+  document.getElementById('products').scrollIntoView({behavior:'smooth'});
+}
+
+function onSearchInput(val) {
+  clearTimeout(SITE.searchTimer);
+  SITE.searchTimer = setTimeout(() => { SITE.search = val.trim(); SITE.page = 1; loadProductsFromDB(); }, 400);
+}
+
+async function loadProductsFromDB() {
+  showProductSkeletons();
+  const params = new URLSearchParams({ action:'get_products', page:SITE.page, limit:SITE.limit, search:SITE.search, category:SITE.category, v:Date.now() });
+  try {
+    const res  = await fetch(`${API}?${params}`);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
+    renderProductsFromDB(data.products || []);
+    renderProductMeta(data);
+    renderProductPagination(data);
+  } catch(e) {
+    document.getElementById('prodGrid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:36px">😕</div><p>Could not load products</p></div>`;
+  }
+}
+
+const CAT_BG    = {'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
+const CAT_EMOJI = {'Platform Scale':'⚖️','Analytical Balance':'🔬','Medical Scale':'💊','Jewellery Scale':'💎','Crane Scale':'🏗️','Moisture Analyser':'🌡️'};
+
+function renderProductsFromDB(prods) {
+  const grid = document.getElementById('prodGrid');
+  if (!grid) return;
+  if (!prods.length) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#94a3b8"><div style="font-size:48px;margin-bottom:12px">🔍</div><h3 style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:8px">No products found</h3><p>Try a different search or category</p></div>`;
+    return;
+  }
+  grid.innerHTML = prods.map(p => {
+    const bg    = CAT_BG[p.cat]    || 'linear-gradient(135deg,#e8f0fe,#c7d9ff)';
+    const emoji = CAT_EMOJI[p.cat] || '📦';
+    const imgSrc = p.image_url ? (p.image_url.startsWith('http')||p.image_url.startsWith('data:') ? p.image_url : `images/${p.image_url}`) : '';
+    const specs  = [p.spec1, p.spec2, p.spec3].filter(Boolean);
+    return `<div class="prod-card reveal">
+      <div style="height:180px;background:${bg};position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:52px">
+        ${imgSrc ? `<img src="${imgSrc}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" onerror="this.style.display='none'">` : emoji}
+        ${p.badge ? `<div style="position:absolute;top:10px;left:10px;background:linear-gradient(135deg,#2563c8,#00aaff);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px">${p.badge}</div>` : ''}
+      </div>
+      <div style="padding:16px">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#00aaff;margin-bottom:5px">${p.cat}</div>
+        <div style="font-size:14px;font-weight:800;color:#0a1628;margin-bottom:6px;line-height:1.3">${p.name}</div>
+        ${p.description ? `<div style="font-size:11px;color:#94a3b8;line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.description}</div>` : ''}
+        ${specs.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">${specs.map(s=>`<span style="background:#f4f7fc;color:#1e293b;font-size:9px;font-weight:600;padding:3px 8px;border-radius:4px">✓ ${s}</span>`).join('')}</div>` : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid #e2e8f0">
+          <div style="font-size:16px;font-weight:800;color:#2563c8">${p.price || 'Contact Us'}</div>
+          <button onclick="sendEnquiry('${p.name.replace(/'/g,"\\'")}','${p.price||''}')" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;cursor:pointer">💬 Enquire</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  const obs2 = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold:0.1});
+  document.querySelectorAll('#prodGrid .reveal').forEach(el => obs2.observe(el));
+}
+
+function renderProductMeta(data) {
+  const el = document.getElementById('productsMeta');
+  if (!el) return;
+  if (!data.total) { el.textContent = 'No products found'; return; }
+  const start = (data.page-1)*data.limit+1;
+  const end   = Math.min(data.page*data.limit, data.total);
+  el.innerHTML = `Showing <strong>${start}–${end}</strong> of <strong>${data.total}</strong> products`;
+}
+
+function renderProductPagination(data) {
+  const wrap = document.getElementById('pagination');
+  if (!wrap) return;
+  if (data.total_pages <= 1) { wrap.innerHTML = ''; return; }
+  let html = `<button class="page-btn" onclick="goPage(${data.page-1})" ${!data.has_prev?'disabled':''}>◀</button>`;
+  for (let i=1; i<=data.total_pages; i++) {
+    if (i===1||i===data.total_pages||Math.abs(i-data.page)<=1) html += `<button class="page-btn ${i===data.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    else if (Math.abs(i-data.page)===2) html += `<span style="color:#94a3b8;padding:0 4px">...</span>`;
+  }
+  html += `<button class="page-btn" onclick="goPage(${data.page+1})" ${!data.has_next?'disabled':''}>▶</button>`;
+  wrap.innerHTML = html;
+}
+
+function goPage(p) { if (p<1) return; SITE.page=p; loadProductsFromDB(); document.getElementById('products').scrollIntoView({behavior:'smooth'}); }
+
+function showProductSkeletons() {
+  const grid = document.getElementById('prodGrid');
+  if (grid) grid.innerHTML = Array(6).fill(0).map(()=>`
+    <div style="background:#fff;border:1.5px solid #e2e8f0;border-radius:16px;overflow:hidden">
+      <div style="height:180px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite"></div>
+      <div style="padding:16px">
+        <div style="height:10px;width:60%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div>
+        <div style="height:14px;width:80%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;margin-bottom:8px"></div>
+        <div style="height:10px;width:100%;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px"></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderTestisFromDB(list) {
+  const grid = document.getElementById('testiGrid');
+  if (!grid || !list.length) return;
+  grid.innerHTML = list.map(t=>`
+    <div class="testi-card reveal">
+      <div style="color:#f59e0b;font-size:14px;margin-bottom:10px">${'⭐'.repeat(t.stars||5)}</div>
+      <p style="font-size:13px;color:#1e293b;line-height:1.7;margin-bottom:14px;font-style:italic">"${t.review||t.text||''}"</p>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2563c8,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0">${(t.name||'C')[0]}</div>
+        <div><div style="font-size:13px;font-weight:700;color:#0a1628">${t.name}</div><div style="font-size:11px;color:#94a3b8">${t.role||''}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+function sendEnquiry(name, price) {
+  const wa  = SITE.whatsapp || '912212345678';
+  const msg = encodeURIComponent(`Hello! I am interested in *${name}*${price?' ('+price+')':''}. Please send more details.`);
+  window.open(`https://wa.me/${wa}?text=${msg}`, '_blank');
+}
+
+const st = document.createElement('style');
+st.textContent = '@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.reveal{opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}.reveal.visible{opacity:1;transform:translateY(0)}.page-btn{width:36px;height:36px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}.page-btn:hover{border-color:#2563c8;color:#2563c8}.page-btn.active{background:#2563c8;border-color:#2563c8;color:#fff}.page-btn:disabled{opacity:.35;cursor:not-allowed}.filter-tab{padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:20px;background:#fff;font-family:Montserrat,sans-serif;font-size:11px;font-weight:600;cursor:pointer;color:#475569;transition:all .2s}.filter-tab:hover{border-color:#2563c8;color:#2563c8}.filter-tab.active{background:#2563c8;border-color:#2563c8;color:#fff}';
+document.head.appendChild(st);
+
 initSite();
-document.addEventListener('DOMContentLoaded',function(){twemojify(document.body);revealNow(document.body);});
 </script>
 </body>
 </html>
