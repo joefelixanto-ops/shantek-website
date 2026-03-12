@@ -1,0 +1,275 @@
+{
+    "company": {
+        "name": "Shantek Instruments Pvt. Ltd.",
+        "tagline": "Precision Weighing Solutions",
+        "phone": "+91 22 1234 5678",
+        "whatsapp": "912212345678",
+        "email": "info@shantekinstruments.com",
+        "domain": "",
+        "address": "Andheri (E), Mumbai \u2014 400069",
+        "about": "India's trusted manufacturer of precision weighing instruments since 1995. ISO 9001:2015 certified with NABL accreditation."
+    },
+    "products": [
+        {
+            "id": 3,
+            "name": "ST-BMI Body Weight Scale",
+            "cat": "Medical Scale",
+            "price": "\u20b914,500",
+            "badge": "Medical",
+            "desc": "Clinically approved for hospitals and diagnostics. BIS approved.",
+            "spec1": "300 kg",
+            "spec2": "BMI Calc",
+            "spec3": "BIS",
+            "emoji": "\ud83d\udc8a",
+            "img": "",
+            "bg": "linear-gradient(135deg,#fef3e2,#fde1b0)"
+        },
+        {
+            "id": 4,
+            "name": "ST-JW Gold & Jewellery Scale",
+            "cat": "Jewellery Scale",
+            "price": "\u20b95,200",
+            "badge": "Premium",
+            "desc": "Touchscreen display with tare function for jewellery shops.",
+            "spec1": "500g",
+            "spec2": "0.01g",
+            "spec3": "Touch",
+            "emoji": "\ud83d\udc8e",
+            "img": "",
+            "bg": "linear-gradient(135deg,#f3e8ff,#ddb6ff)"
+        },
+        {
+            "id": 5,
+            "name": "ST-CR Wireless Crane Scale",
+            "cat": "Crane Scale",
+            "price": "\u20b945,000",
+            "badge": "Heavy Duty",
+            "desc": "100m wireless remote display for steel mills and shipyards.",
+            "spec1": "5000 kg",
+            "spec2": "100m",
+            "spec3": "IP65",
+            "emoji": "\ud83c\udfd7\ufe0f",
+            "img": "",
+            "bg": "linear-gradient(135deg,#e0f0ff,#b3d4ff)"
+        },
+        {
+            "id": 6,
+            "name": "ST-MA Halogen Moisture Analyser",
+            "cat": "Moisture Analyser",
+            "price": "\u20b968,000",
+            "badge": "Featured",
+            "desc": "Fast halogen heating for food, plastics and chemicals.",
+            "spec1": "120g",
+            "spec2": "0.01%",
+            "spec3": "USB",
+            "emoji": "\ud83c\udf21\ufe0f",
+            "img": "",
+            "bg": "linear-gradient(135deg,#fde8e8,#ffbdbd)"
+        }
+    ],
+    "slides": [
+        {
+            "num": 1,
+            "title": "Industrial Platform Scales Built to Last",
+            "subtitle": "ISO 9001:2015 Certified",
+            "desc": "Heavy-duty weighing platforms for logistics, warehousing and manufacturing.",
+            "badge": "\u00b15g",
+            "badgeLabel": "Accuracy",
+            "btn1": "Explore Products",
+            "btn2": "Request Quote",
+            "bg": "",
+            "emoji": "\u2696\ufe0f"
+        },
+        {
+            "num": 2,
+            "title": "Analytical Balances for Precision Labs",
+            "subtitle": "Pharmaceutical Grade",
+            "desc": "Sub-milligram accuracy for pharmaceutical, chemical and research applications.",
+            "badge": "0.1mg",
+            "badgeLabel": "Resolution",
+            "btn1": "View Balances",
+            "btn2": "Get NABL Cert",
+            "bg": "",
+            "emoji": "\ud83d\udd2c"
+        },
+        {
+            "num": 3,
+            "title": "Crane & Hook Scales Up to 5000 kg",
+            "subtitle": "Heavy Industrial",
+            "desc": "Wireless remote display, IP65 weatherproof. Trusted in steel mills across India.",
+            "badge": "5T",
+            "badgeLabel": "Max Capacity",
+            "btn1": "View Crane Scales",
+            "btn2": "Custom Specs",
+            "bg": "",
+            "emoji": "\ud83c\udfd7\ufe0f"
+        }
+    ],
+    "categories": [
+        {
+            "emoji": "\u2696\ufe0f",
+            "name": "Platform Scales",
+            "count": "128 products"
+        },
+        {
+            "emoji": "\ud83d\udd2c",
+            "name": "Analytical Balances",
+            "count": "64 products"
+        },
+        {
+            "emoji": "\ud83c\udfe5",
+            "name": "Medical Scales",
+            "count": "42 products"
+        },
+        {
+            "emoji": "\ud83d\udc8e",
+            "name": "Jewellery Scales",
+            "count": "38 products"
+        },
+        {
+            "emoji": "\ud83c\udfd7\ufe0f",
+            "name": "Crane Scales",
+            "count": "22 products"
+        },
+        {
+            "emoji": "\ud83c\udf21\ufe0f",
+            "name": "Moisture Analysers",
+            "count": "18 products"
+        }
+    ],
+    "testimonials": [
+        {
+            "name": "Rajesh Kulkarni",
+            "role": "Operations Head, Mahindra Logistics",
+            "text": "Platform scales running 24\/7 for 3 years with zero calibration drift. Outstanding build quality.",
+            "stars": 5
+        },
+        {
+            "name": "Sunita Patil",
+            "role": "QA Director, Sun Pharmaceutical",
+            "text": "Standardised on Shantek balances across all 12 QC labs. NABL support is unmatched.",
+            "stars": 5
+        },
+        {
+            "name": "Arjun Mehta",
+            "role": "Founder, Mehta Gold & Jewels",
+            "text": "Competitive pricing with zero compromise on precision. 8 years of reliability.",
+            "stars": 4
+        }
+    ],
+    "stats": [
+        {
+            "num": "30+",
+            "label": "Years"
+        },
+        {
+            "num": "500+",
+            "label": "Products"
+        },
+        {
+            "num": "10K+",
+            "label": "Clients"
+        },
+        {
+            "num": "28",
+            "label": "States"
+        },
+        {
+            "num": "99.2%",
+            "label": "Satisfaction"
+        }
+    ],
+    "lastUpdated": "2026-03-09 18:51:57",
+    "images": [
+        {
+            "name": "analytical-balance.png",
+            "url": "analytical-balance.png",
+            "size": 94009
+        },
+        {
+            "name": "baby-scale.png",
+            "url": "baby-scale.png",
+            "size": 60603
+        },
+        {
+            "name": "battery-adapter.png",
+            "url": "battery-adapter.png",
+            "size": 127712
+        },
+        {
+            "name": "bench-scale.png",
+            "url": "bench-scale.png",
+            "size": 91535
+        },
+        {
+            "name": "calibration-weights.png",
+            "url": "calibration-weights.png",
+            "size": 314831
+        },
+        {
+            "name": "conveyor-scale.png",
+            "url": "conveyor-scale.png",
+            "size": 149554
+        },
+        {
+            "name": "counting-scale.png",
+            "url": "counting-scale.png",
+            "size": 155500
+        },
+        {
+            "name": "crane-scale.png",
+            "url": "crane-scale.png",
+            "size": 138043
+        },
+        {
+            "name": "jewelry-scale.png",
+            "url": "jewelry-scale.png",
+            "size": 116967
+        },
+        {
+            "name": "kitchen-scale.png",
+            "url": "kitchen-scale.png",
+            "size": 36663
+        },
+        {
+            "name": "loadcell.png",
+            "url": "loadcell.png",
+            "size": 110639
+        },
+        {
+            "name": "moisture-analyzer.png",
+            "url": "moisture-analyzer.png",
+            "size": 109747
+        },
+        {
+            "name": "platform-scale.png",
+            "url": "platform-scale.png",
+            "size": 146486
+        },
+        {
+            "name": "price-computing-scale.png",
+            "url": "price-computing-scale.png",
+            "size": 126819
+        },
+        {
+            "name": "thermal-printer.png",
+            "url": "thermal-printer.png",
+            "size": 81401
+        },
+        {
+            "name": "waterproof-scale.png",
+            "url": "waterproof-scale.png",
+            "size": 78851
+        },
+        {
+            "name": "weighing-indicator.png",
+            "url": "weighing-indicator.png",
+            "size": 83922
+        },
+        {
+            "name": "weighing-scale.png",
+            "url": "weighing-scale.png",
+            "size": 82915
+        }
+    ]
+}

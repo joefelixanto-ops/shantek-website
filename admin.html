@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shantek Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1a3a7c;--blue-light:#2563c8;--sky:#3b82f6;--accent:#00aaff;
+  --dark:#0a1628;--white:#fff;--off:#f4f7fc;--gray:#e2e8f0;
+  --gray2:#94a3b8;--text:#1e293b;--green:#16a34a;--red:#dc2626;
+}
+body{font-family:'Montserrat',sans-serif;background:var(--off);color:var(--text);min-height:100vh}
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,var(--dark),var(--blue));display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-box{background:#fff;border-radius:20px;padding:48px 40px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,.3);text-align:center}
+.login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--blue-light),var(--sky));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;margin:0 auto 20px;box-shadow:0 8px 24px rgba(37,99,200,.35)}
+.login-box h2{font-size:22px;font-weight:800;color:var(--dark);margin-bottom:6px}
+.login-box p{font-size:13px;color:var(--gray2);margin-bottom:28px}
+.login-field{margin-bottom:14px;text-align:left}
+.login-field label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray2);display:block;margin-bottom:5px}
+.login-field input{width:100%;padding:12px 16px;border:1.5px solid var(--gray);border-radius:8px;font-family:'Montserrat',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s}
+.login-field input:focus{border-color:var(--blue-light)}
+.btn-login{width:100%;background:linear-gradient(135deg,var(--blue-light),var(--sky));color:#fff;border:none;padding:14px;border-radius:10px;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;box-shadow:0 4px 16px rgba(37,99,200,.3);transition:all .2s}
+.btn-login:hover{transform:translateY(-1px)}
+.login-error{color:var(--red);font-size:12px;margin-top:8px;display:none}
+.login-note{font-size:11px;color:var(--gray2);margin-top:12px;padding:10px;background:var(--off);border-radius:8px;text-align:left;line-height:1.7}
+
+/* ── LAYOUT ── */
+#adminApp{display:none}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:240px;background:var(--dark);z-index:100;display:flex;flex-direction:column;overflow-y:auto}
+.sidebar-brand{padding:22px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:12px}
+.brand-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--blue-light),var(--sky));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;flex-shrink:0}
+.brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:1px;text-transform:uppercase}
+.brand-sub{font-size:9px;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+.conn-badge{margin:10px 10px 4px;padding:9px 12px;border-radius:8px;font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;background:rgba(22,163,74,.15);color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0;box-shadow:0 0 6px #4ade80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sidebar-section{padding:14px 12px 6px;font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.22)}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 14px;margin:2px 8px;border-radius:8px;color:rgba(255,255,255,.48);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.nav-item.active{background:linear-gradient(135deg,rgba(37,99,200,.4),rgba(0,170,255,.2));color:#fff;border:1px solid rgba(0,170,255,.18)}
+.nav-item .icon{font-size:15px;width:18px;text-align:center}
+.sidebar-bottom{margin-top:auto;padding:14px 8px;border-top:1px solid rgba(255,255,255,.07)}
+
+/* ── MAIN ── */
+.main{margin-left:240px;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid var(--gray);padding:0 26px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.page-title{font-size:17px;font-weight:800;color:var(--dark)}
+.page-sub{font-size:11px;color:var(--gray2);margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.btn-publish{background:linear-gradient(135deg,var(--green),#15803d);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(22,163,74,.3);display:flex;align-items:center;gap:7px}
+.btn-publish:hover{transform:translateY(-1px)}
+.btn-publish:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.last-saved{font-size:11px;color:var(--gray2)}
+.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border:1.5px solid var(--gray);border-radius:8px;cursor:pointer;font-size:18px;background:#fff}
+.content{padding:26px}
+
+/* ── PANELS ── */
+.panel{display:none}.panel.active{display:block}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1.5px solid var(--gray);border-radius:14px;padding:20px;margin-bottom:18px}
+.card-title{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.form-full{grid-column:1/-1}
+.field label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray2);display:block;margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;padding:10px 13px;border:1.5px solid var(--gray);border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;color:var(--text);transition:border-color .2s;outline:none;background:#fff}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue-light)}
+.field textarea{resize:vertical;min-height:70px}
+
+/* ── IMAGE MANAGER SECTION ── */
+.img-method-tabs{display:flex;gap:4px;margin-bottom:14px;background:var(--off);border-radius:10px;padding:4px}
+.img-tab{flex:1;padding:8px;text-align:center;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;color:var(--gray2);transition:all .2s}
+.img-tab.active{background:#fff;color:var(--blue-light);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+
+/* URL method */
+.img-url-wrap{position:relative}
+.img-url-wrap input{padding-right:80px}
+.btn-preview-url{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--blue-light);color:#fff;border:none;padding:5px 12px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Montserrat',sans-serif}
+.img-url-hint{font-size:10px;color:var(--gray2);margin-top:5px;line-height:1.5;padding:8px;background:rgba(37,99,200,.04);border-radius:6px;border:1px solid rgba(37,99,200,.1)}
+.img-url-hint code{background:rgba(37,99,200,.1);padding:1px 5px;border-radius:3px;font-size:10px;color:var(--blue-light)}
+
+/* Upload method */
+.img-upload-zone{border:2px dashed var(--gray);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;background:#fafafa}
+.img-upload-zone:hover{border-color:var(--blue-light);background:rgba(37,99,200,.02)}
+.img-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-upload-zone .up-icon{font-size:26px;margin-bottom:6px}
+.img-upload-zone p{font-size:12px;color:var(--gray2);font-weight:600}
+.img-upload-zone span{font-size:10px;color:var(--accent)}
+.upload-progress{width:0%;height:3px;background:var(--blue-light);border-radius:2px;margin-top:8px;transition:width .3s;display:none}
+
+/* Preview */
+.img-preview-box{border:1.5px solid var(--gray);border-radius:10px;overflow:hidden;position:relative;display:none}
+.img-preview-box.show{display:block}
+.img-preview-box img{width:100%;height:160px;object-fit:cover;display:block}
+.img-preview-box .img-clear{position:absolute;top:6px;right:6px;background:rgba(220,38,38,.9);color:#fff;border:none;width:24px;height:24px;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.img-status{font-size:10px;font-weight:700;padding:4px 10px;border-radius:5px;margin-top:6px;display:inline-block}
+.img-status.ok{background:rgba(22,163,74,.1);color:var(--green)}
+.img-status.err{background:rgba(220,38,38,.1);color:var(--red)}
+.img-status.loading{background:rgba(37,99,200,.1);color:var(--blue-light)}
+
+/* Image Library */
+.img-library{margin-top:10px}
+.img-library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.img-library-search{padding:8px 12px;border:1.5px solid var(--gray);border-radius:7px;font-family:'Montserrat',sans-serif;font-size:12px;width:200px;outline:none}
+.img-library-search:focus{border-color:var(--blue-light)}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;max-height:320px;overflow-y:auto;padding:4px}
+.img-grid-item{border-radius:8px;overflow:hidden;border:2px solid transparent;cursor:pointer;transition:all .2s;position:relative;aspect-ratio:1}
+.img-grid-item:hover{border-color:var(--blue-light);transform:scale(1.03)}
+.img-grid-item.selected{border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.2)}
+.img-grid-item img{width:100%;height:100%;object-fit:cover;display:block}
+.img-grid-item .img-name{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:8px;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.img-grid-empty{grid-column:1/-1;text-align:center;padding:24px;color:var(--gray2);font-size:12px}
+
+/* Products */
+.prod-list{display:flex;flex-direction:column;gap:9px}
+.prod-item{display:flex;align-items:center;gap:12px;background:#fff;border:1.5px solid var(--gray);border-radius:10px;padding:11px 13px;transition:all .2s}
+.prod-item:hover{border-color:var(--sky);box-shadow:0 3px 12px rgba(37,99,200,.07)}
+.prod-thumb{width:50px;height:50px;border-radius:7px;background:linear-gradient(135deg,#e8f0fe,#c7d9ff);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+.prod-thumb img{width:100%;height:100%;object-fit:cover}
+.prod-info{flex:1;min-width:0}
+.prod-item-name{font-size:13px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-item-cat{font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.prod-item-price{font-size:11px;color:var(--gray2);margin-top:1px}
+.prod-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-edit{background:rgba(37,99,200,.08);color:var(--blue-light);border:1px solid rgba(37,99,200,.2);padding:5px 11px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-edit:hover{background:var(--blue-light);color:#fff}
+.btn-del{background:rgba(220,38,38,.08);color:var(--red);border:1px solid rgba(220,38,38,.2);padding:5px 9px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
+.btn-del:hover{background:var(--red);color:#fff}
+.btn-add{background:linear-gradient(135deg,var(--blue-light),var(--sky));color:#fff;border:none;padding:9px 18px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;box-shadow:0 3px 10px rgba(37,99,200,.22)}
+.btn-add:hover{transform:translateY(-1px)}
+
+/* Slider */
+.slide-item{background:var(--dark);border-radius:12px;padding:16px;display:flex;gap:13px;margin-bottom:11px;border:1.5px solid rgba(255,255,255,.07);align-items:flex-start}
+.slide-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--blue-light),var(--accent));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;margin-top:3px}
+.slide-fields{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slide-fields .field label{color:rgba(255,255,255,.4)}
+.slide-fields .field input{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:#fff}
+.slide-fields .field input:focus{border-color:var(--accent)}
+.slide-img-preview{width:100%;height:90px;object-fit:cover;border-radius:7px;display:none;margin-top:4px;border:1px solid rgba(255,255,255,.1)}
+.slide-img-preview.show{display:block}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:620px;box-shadow:0 32px 80px rgba(0,0,0,.2);transform:translateY(16px);transition:transform .2s;margin:auto}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--gray);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:1;border-radius:16px 16px 0 0}
+.modal-head h3{font-size:15px;font-weight:800;color:var(--dark)}
+.modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--gray2)}
+.modal-body{padding:22px}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--gray);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:#fff;border-radius:0 0 16px 16px}
+.btn-cancel{background:none;border:1.5px solid var(--gray);color:var(--gray2);padding:9px 18px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer}
+.btn-confirm{background:linear-gradient(135deg,var(--blue-light),var(--sky));color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px rgba(37,99,200,.3)}
+
+/* Saving overlay */
+.saving-overlay{position:fixed;inset:0;background:rgba(10,22,40,.7);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.saving-overlay.show{opacity:1;pointer-events:all}
+.saving-box{background:#fff;border-radius:16px;padding:32px 44px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.saving-spinner{width:44px;height:44px;border:4px solid var(--gray);border-top-color:var(--blue-light);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.saving-box p{font-size:15px;font-weight:700;color:var(--dark)}
+.saving-box span{font-size:12px;color:var(--gray2)}
+
+/* Toast */
+.toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--dark);border-left:3px solid var(--accent);border-radius:10px;padding:13px 18px;color:#fff;min-width:230px;box-shadow:0 8px 32px rgba(0,0,0,.25);transform:translateX(130%);transition:transform .35s cubic-bezier(.25,.46,.45,.94)}
+.toast.show{transform:translateX(0)}
+.toast.success{border-left-color:#4ade80}
+.toast.error{border-left-color:#f87171}
+.toast-title{font-size:13px;font-weight:700;margin-bottom:2px}
+.toast-msg{font-size:11px;color:rgba(255,255,255,.5)}
+
+/* Image uploader panel */
+#panel-images .upload-big{border:2px dashed var(--gray);border-radius:14px;padding:40px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:all .2s;background:#fafafa}
+#panel-images .upload-big:hover{border-color:var(--blue-light);background:rgba(37,99,200,.02)}
+#panel-images .upload-big input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.bulk-list{max-height:360px;overflow-y:auto;margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.bulk-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1.5px solid var(--gray);border-radius:8px}
+.bulk-thumb{width:44px;height:44px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--off)}
+.bulk-info{flex:1;min-width:0}
+.bulk-name{font-size:12px;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bulk-size{font-size:10px;color:var(--gray2)}
+.bulk-bar{height:3px;background:var(--gray);border-radius:2px;margin-top:4px;overflow:hidden}
+.bulk-bar-fill{height:100%;background:var(--green);width:0%;transition:width .5s}
+.bulk-status{font-size:10px;font-weight:700;flex-shrink:0}
+.bulk-status.done{color:var(--green)}
+.bulk-status.fail{color:var(--red)}
+.btn-upload-all{background:linear-gradient(135deg,var(--green),#15803d);color:#fff;border:none;padding:11px 24px;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 3px 10px rgba(22,163,74,.3)}
+.btn-upload-all:hover{transform:translateY(-1px)}
+.btn-upload-all:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Uploaded gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:14px}
+.gallery-item{border-radius:10px;overflow:hidden;border:1.5px solid var(--gray);position:relative;cursor:pointer;transition:all .2s;aspect-ratio:1}
+.gallery-item:hover{border-color:var(--blue-light);box-shadow:0 4px 14px rgba(37,99,200,.12)}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-item-name{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;font-size:9px;font-weight:600;padding:12px 6px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gallery-item .copy-url{position:absolute;top:4px;right:4px;background:rgba(37,99,200,.85);color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:9px;font-weight:700;cursor:pointer;opacity:0;transition:opacity .2s}
+.gallery-item:hover .copy-url{opacity:1}
+.gallery-empty{grid-column:1/-1;text-align:center;padding:32px;color:var(--gray2)}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .form-grid{grid-template-columns:1fr}
+  .slide-fields{grid-template-columns:1fr}
+  .mobile-toggle{display:flex!important}
+  .gallery-grid{grid-template-columns:repeat(auto-fill,minmax(80px,1fr))}
+}
+</style>
+</head>
+<body>
+
+<div class="saving-overlay" id="savingOverlay">
+  <div class="saving-box">
+    <div class="saving-spinner"></div>
+    <p id="savingText">Saving...</p>
+    <span>Please wait</span>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">S</div>
+    <h2>Admin Login</h2>
+    <p>Shantek Instruments — Website Manager</p>
+    <div class="login-field">
+      <label>Your Website URL</label>
+      <input type="text" id="serverUrl" placeholder="https://genzdgltech.com/shantek">
+    </div>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" value="admin">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">🔐 Login & Connect</button>
+    <div class="login-error" id="loginError"></div>
+    <div class="login-note">
+      💡 <strong>Local XAMPP:</strong> <code style="background:rgba(37,99,200,.1);padding:2px 6px;border-radius:4px;color:#2563c8">http://localhost/shantek</code><br>
+      🌐 <strong>Live GoDaddy:</strong> <code style="background:rgba(37,99,200,.1);padding:2px 6px;border-radius:4px;color:#2563c8">https://genzdgltech.com/shantek</code><br>
+      🔑 <strong>Password:</strong> shantek123 &nbsp;|&nbsp; Make sure MySQL is running!
+    </div>
+    <div id="debugInfo" style="margin-top:10px;font-size:10px;color:#94a3b8;text-align:left;display:none;padding:8px;background:#f8fafc;border-radius:6px;word-break:break-all"></div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminApp">
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">S</div>
+      <div>
+        <div class="brand-name">Shantek</div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="conn-badge">
+      <div class="conn-dot"></div>
+      <span id="connText" style="font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Connected</span>
+    </div>
+
+    <div class="sidebar-section">Content</div>
+    <div class="nav-item active" data-panel="products"><span class="icon">📦</span> Products</div>
+    <div class="nav-item" data-panel="images"><span class="icon">🖼️</span> Image Manager</div>
+    <div class="nav-item" data-panel="slider"><span class="icon">🎠</span> Hero Slider</div>
+    <div class="nav-item" data-panel="categories"><span class="icon">📂</span> Categories</div>
+    <div class="nav-item" data-panel="testimonials"><span class="icon">⭐</span> Testimonials</div>
+
+    <div class="sidebar-section">Settings</div>
+    <div class="nav-item" data-panel="company"><span class="icon">🏢</span> Company Info</div>
+    <div class="nav-item" data-panel="stats"><span class="icon">📊</span> Stats Numbers</div>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item" onclick="doLogout()"><span class="icon">🚪</span> Logout</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:11px">
+        <div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</div>
+        <div>
+          <div class="page-title" id="pageTitle">Products</div>
+          <div class="page-sub" id="pageSub">Add, edit and manage your product listings</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="last-saved" id="lastSaved"></span>
+        <button class="btn-publish" id="saveBtn" onclick="saveAll()">🚀 Save & Publish Live</button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ══ PRODUCTS ══ -->
+      <div class="panel active" id="panel-products">
+        <div class="card">
+          <div class="card-title">
+            <span>📦 All Products <span id="prodCount" style="font-size:11px;color:var(--gray2);font-weight:500"></span></span>
+            <button class="btn-add" onclick="openProductModal()">+ Add Product</button>
+          </div>
+          <div class="prod-list" id="productList"></div>
+        </div>
+      </div>
+
+      <!-- ══ IMAGE MANAGER ══ -->
+      <div class="panel" id="panel-images">
+
+        <!-- Upload Section -->
+        <div class="card">
+          <div class="card-title">
+            📤 Upload Images to Server
+            <span style="font-size:11px;color:var(--gray2);font-weight:500">Upload up to 600+ images</span>
+          </div>
+
+          <div style="background:rgba(37,99,200,.04);border:1px solid rgba(37,99,200,.12);border-radius:10px;padding:14px;margin-bottom:16px">
+            <div style="font-size:12px;font-weight:700;color:var(--blue-light);margin-bottom:6px">📋 How to upload 600 images fast:</div>
+            <div style="font-size:11px;color:var(--gray2);line-height:1.8">
+              1. On your computer, zip all images into one file called <code style="background:rgba(37,99,200,.1);padding:1px 5px;border-radius:3px;color:var(--blue-light)">images.zip</code><br>
+              2. Go to <strong>GoDaddy cPanel → File Manager → public_html/shantek/images</strong><br>
+              3. Click <strong>Upload</strong> → upload the zip file<br>
+              4. Right click the zip → click <strong>Extract</strong><br>
+              5. All images will be in your images folder ✅<br>
+              6. Then use the URL field when adding products
+            </div>
+          </div>
+
+          <div class="upload-big" id="bulkUploadZone">
+            <input type="file" accept="image/*" multiple onchange="handleBulkUpload(this)">
+            <div style="font-size:40px;margin-bottom:10px">📁</div>
+            <div style="font-size:14px;font-weight:700;color:var(--dark);margin-bottom:4px">Click or drag images here</div>
+            <div style="font-size:12px;color:var(--gray2)">Select multiple images at once — JPG, PNG, WebP</div>
+            <div style="font-size:11px;color:var(--accent);margin-top:6px">This uploads directly to your server images folder</div>
+          </div>
+
+          <div id="bulkList" class="bulk-list"></div>
+          <div id="bulkActions" style="display:none;margin-top:14px;display:flex;gap:10px;align-items:center">
+            <button class="btn-upload-all" id="btnUploadAll" onclick="uploadAllImages()">⬆️ Upload All to Server</button>
+            <span id="uploadProgress" style="font-size:12px;color:var(--gray2)"></span>
+          </div>
+        </div>
+
+        <!-- Image Gallery / Library -->
+        <div class="card">
+          <div class="card-title">
+            🗂️ Image Library — Your Uploaded Images
+            <button class="btn-add" onclick="refreshGallery()" style="font-size:11px;padding:7px 14px">🔄 Refresh</button>
+          </div>
+          <div style="margin-bottom:12px">
+            <input type="text" class="img-library-search" id="gallerySearch" placeholder="🔍 Search images..." oninput="filterGallery(this.value)" style="width:100%">
+          </div>
+          <div class="gallery-grid" id="galleryGrid">
+            <div class="gallery-empty">Click Refresh to load your uploaded images from the server</div>
+          </div>
+          <div style="margin-top:12px;padding:12px;background:var(--off);border-radius:8px;font-size:11px;color:var(--gray2)">
+            💡 <strong>Tip:</strong> Click any image to copy its URL. Then paste that URL when adding/editing products.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ══ SLIDER ══ -->
+      <div class="panel" id="panel-slider">
+        <div class="card">
+          <div class="card-title">🎠 Hero Slider — 3 Slides</div>
+          <div id="sliderItems"></div>
+        </div>
+      </div>
+
+      <!-- ══ CATEGORIES ══ -->
+      <div class="panel" id="panel-categories">
+        <div class="card">
+          <div class="card-title">📂 Product Categories</div>
+          <div id="catList" style="display:flex;flex-direction:column;gap:10px"></div>
+        </div>
+      </div>
+
+      <!-- ══ TESTIMONIALS ══ -->
+      <div class="panel" id="panel-testimonials">
+        <div class="card">
+          <div class="card-title">⭐ Customer Testimonials</div>
+          <div id="testiList" style="display:flex;flex-direction:column;gap:13px"></div>
+        </div>
+      </div>
+
+      <!-- ══ COMPANY ══ -->
+      <div class="panel" id="panel-company">
+        <div class="card">
+          <div class="card-title">🏢 Company Information</div>
+          <div class="form-grid">
+            <div class="field"><label>Company Name</label><input type="text" id="cName"></div>
+            <div class="field"><label>Tagline</label><input type="text" id="cTagline"></div>
+            <div class="field"><label>Phone</label><input type="text" id="cPhone"></div>
+            <div class="field"><label>WhatsApp (with country code)</label><input type="text" id="cWA"></div>
+            <div class="field"><label>Email</label><input type="email" id="cEmail"></div>
+            <div class="field"><label>Domain</label><input type="text" id="cDomain"></div>
+            <div class="field form-full"><label>Address</label><input type="text" id="cAddr"></div>
+            <div class="field form-full"><label>About (Footer text)</label><textarea id="cAbout"></textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ STATS ══ -->
+      <div class="panel" id="panel-stats">
+        <div class="card">
+          <div class="card-title">📊 Stats Bar Numbers</div>
+          <div id="statsList" class="form-grid"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Add Product</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="field"><label>Product Name</label><input type="text" id="pName" placeholder="e.g. ST-PL Platform Scale"></div>
+        <div class="field"><label>Category</label>
+          <select id="pCat">
+            <option>Platform Scale</option><option>Analytical Balance</option>
+            <option>Medical Scale</option><option>Jewellery Scale</option>
+            <option>Crane Scale</option><option>Moisture Analyser</option>
+          </select>
+        </div>
+        <div class="field form-full"><label>Description</label><textarea id="pDesc" placeholder="Short product description..."></textarea></div>
+        <div class="field"><label>Price (e.g. ₹8,500)</label><input type="text" id="pPrice" placeholder="₹0,000"></div>
+        <div class="field"><label>Badge (Best Seller / New / etc.)</label><input type="text" id="pBadge" placeholder="Best Seller"></div>
+        <div class="field"><label>Spec 1</label><input type="text" id="pSpec1" placeholder="150 kg Capacity"></div>
+        <div class="field"><label>Spec 2</label><input type="text" id="pSpec2" placeholder="±5g Accuracy"></div>
+        <div class="field"><label>Spec 3</label><input type="text" id="pSpec3" placeholder="RS-232 Output"></div>
+
+        <!-- IMAGE SECTION -->
+        <div class="field form-full">
+          <label>Product Image</label>
+          <div class="img-method-tabs">
+            <div class="img-tab active" onclick="switchImgTab('url',this)">🔗 Image URL (Recommended)</div>
+            <div class="img-tab" onclick="switchImgTab('upload',this)">📤 Upload File</div>
+          </div>
+
+          <!-- URL Method -->
+          <div id="imgTabUrl">
+            <div class="img-url-wrap">
+              <input type="text" id="pImgUrl" placeholder="e.g. platform-scale-1.jpg or full URL" oninput="onImgUrlChange(this.value)">
+              <button class="btn-preview-url" onclick="previewImgUrl()">Preview</button>
+            </div>
+            <div class="img-url-hint">
+              💡 Just type the <strong>filename</strong> like <code>platform-scale-1.jpg</code><br>
+              Or paste a full URL like <code>https://genzdgltech.com/shantek/images/product.jpg</code><br>
+              Images folder: <code id="imgFolderHint">your-domain.com/shantek/images/</code>
+            </div>
+          </div>
+
+          <!-- Upload Method -->
+          <div id="imgTabUpload" style="display:none">
+            <div class="img-upload-zone">
+              <input type="file" accept="image/*" onchange="handleProductImgUpload(this)">
+              <div class="up-icon">📷</div>
+              <p>Click to upload product photo</p>
+              <span>JPG, PNG — will be saved to server images folder</span>
+              <div class="upload-progress" id="prodUploadBar"></div>
+            </div>
+          </div>
+
+          <!-- Preview Box -->
+          <div class="img-preview-box" id="imgPreviewBox" style="margin-top:10px">
+            <img id="pImgPreview" src="" alt="Preview">
+            <button class="img-clear" onclick="clearProductImg()" title="Remove image">✕</button>
+          </div>
+          <div id="imgStatusMsg"></div>
+        </div>
+
+        <!-- Quick select from library -->
+        <div class="field form-full">
+          <label>Or Pick from Image Library <span style="color:var(--accent);font-size:9px;font-weight:600">— click image to select</span></label>
+          <input type="text" class="img-library-search" id="modalLibSearch" placeholder="🔍 Search your uploaded images..." oninput="filterModalLib(this.value)" style="width:100%;margin-bottom:8px">
+          <div class="img-grid" id="modalImgGrid">
+            <div class="img-grid-empty">Upload images in Image Manager first, then they appear here</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="saveProduct()">💾 Save Product</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <div class="toast-title" id="toastTitle"></div>
+  <div class="toast-msg" id="toastMsg"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════
+let DATA = {};
+let SERVER_URL = '';
+let PASSWORD = '';
+let editingId = null;
+let uploadedImages = []; // {name, url, size}
+let pendingUploads = []; // files to upload
+
+const EMOJIS = {'Platform Scale':'⚖️','Analytical Balance':'🔬','Medical Scale':'💊','Jewellery Scale':'💎','Crane Scale':'🏗️','Moisture Analyser':'🌡️'};
+const BGGRD  = {'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
+
+// ══════════════════════════════════════
+//  LOGIN
+// ══════════════════════════════════════
+async function doLogin() {
+  const url  = document.getElementById('serverUrl').value.trim().replace(/\/+$/, '');
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!url)  { showLoginErr('Please enter your website URL'); return; }
+  if (!pass) { showLoginErr('Please enter your password'); return; }
+
+  let fixedUrl = url;
+  if (!fixedUrl.startsWith('http')) fixedUrl = 'https://' + fixedUrl;
+  fixedUrl = fixedUrl.replace(/\/+$/, '');
+  document.getElementById('serverUrl').value = fixedUrl;
+
+  showSaving('Connecting to server...');
+  try {
+    const res  = await fetch(fixedUrl + '/api/api.php?action=login', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: pass})
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message || 'Wrong password');
+
+    SERVER_URL = fixedUrl;
+    PASSWORD   = pass;
+    DATA       = data;
+
+    document.getElementById('imgFolderHint').textContent = fixedUrl.replace('https://','').replace('http://','') + '/images/';
+    hideSaving();
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display    = 'block';
+    document.getElementById('connText').textContent = fixedUrl.replace('https://','').replace('http://','');
+    if (DATA.images) uploadedImages = DATA.images;
+    renderAll();
+    showToast('✅ Connected!', 'Loaded from MySQL database.', 'success');
+  } catch(e) {
+    hideSaving();
+    showLoginErr(e.message || 'Cannot connect. Check URL and make sure MySQL is running.');
+  }
+}
+function showLoginErr(msg) {
+  const el = document.getElementById('loginError');
+  el.textContent = '❌ ' + msg; el.style.display = 'block';
+  // Show debug info
+  const dbg = document.getElementById('debugInfo');
+  if (dbg) {
+    const url = document.getElementById('serverUrl').value;
+    dbg.innerHTML = '🔍 Tried: <strong>' + url + '/save.php</strong><br>Error: ' + msg;
+    dbg.style.display = 'block';
+  }
+}
+function doLogout() {
+  SERVER_URL = ''; PASSWORD = ''; DATA = {};
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+// ══════════════════════════════════════
+//  SAVE TO SERVER
+// ══════════════════════════════════════
+async function saveAll() {
+  collectFormData();
+  showSaving('Saving company info...');
+  document.getElementById('saveBtn').disabled = true;
+  try {
+    const res = await fetch(`${SERVER_URL}/api/api.php?action=save_company`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({...DATA.company, password: PASSWORD})
+    });
+    const result = await res.json();
+    hideSaving();
+    document.getElementById('saveBtn').disabled = false;
+    const now = new Date().toLocaleTimeString();
+    if (result.success) {
+      document.getElementById('lastSaved').textContent = 'Saved: ' + now;
+      showToast('🚀 Saved!', 'Changes saved to database.', 'success');
+    } else {
+      showToast('❌ Failed', result.message, 'error');
+    }
+  } catch(e) {
+    hideSaving();
+    document.getElementById('saveBtn').disabled = false;
+    showToast('❌ Error', 'Could not reach server.', 'error');
+  }
+}
+function collectFormData() {
+  DATA.company = {
+    name: document.getElementById('cName').value,
+    tagline: document.getElementById('cTagline').value,
+    phone: document.getElementById('cPhone').value,
+    whatsapp: document.getElementById('cWA').value,
+    email: document.getElementById('cEmail').value,
+    domain: document.getElementById('cDomain').value,
+    address: document.getElementById('cAddr').value,
+    about: document.getElementById('cAbout').value,
+  };
+}
+
+// ══════════════════════════════════════
+//  PANELS
+// ══════════════════════════════════════
+const panelInfo = {
+  products:     ['Products','Add, edit and manage your products'],
+  images:       ['Image Manager','Upload and manage your 600+ product images'],
+  slider:       ['Hero Slider','Edit the 3 slides on your homepage'],
+  categories:   ['Categories','Edit product category cards'],
+  testimonials: ['Testimonials','Manage customer reviews'],
+  company:      ['Company Info','Update business details'],
+  stats:        ['Stats Numbers','Edit the numbers strip'],
+};
+document.querySelectorAll('.nav-item[data-panel]').forEach(el => {
+  el.addEventListener('click', () => {
+    const id = el.dataset.panel;
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    el.classList.add('active');
+    document.getElementById('pageTitle').textContent = panelInfo[id][0];
+    document.getElementById('pageSub').textContent = panelInfo[id][1];
+    document.getElementById('sidebar').classList.remove('open');
+    if (id === 'images') renderGallery(uploadedImages);
+  });
+});
+
+// ══════════════════════════════════════
+//  RENDER ALL
+// ══════════════════════════════════════
+function renderAll() {
+  renderProducts();
+  renderSlider();
+  renderCategories();
+  renderTestimonials();
+  renderCompany();
+  renderStats();
+}
+
+// ══════════════════════════════════════
+//  PRODUCTS
+// ══════════════════════════════════════
+function renderProducts() {
+  const list = document.getElementById('productList');
+  list.innerHTML = '';
+  const prods = DATA.products || [];
+  document.getElementById('prodCount').textContent = `(${prods.length} products)`;
+  prods.forEach(p => {
+    const imgSrc = resolveImg(p.img);
+    const div = document.createElement('div');
+    div.className = 'prod-item';
+    div.innerHTML = `
+      <div class="prod-thumb" style="background:${p.bg||BGGRD[p.cat]||'linear-gradient(135deg,#e8f0fe,#c7d9ff)'}">
+        ${imgSrc ? `<img src="${imgSrc}" alt="" onerror="this.style.display='none';this.nextSibling.style.display='flex'">` : ''}
+        <span style="${imgSrc?'display:none':''}">${p.emoji||'📦'}</span>
+      </div>
+      <div class="prod-info">
+        <div class="prod-item-name">${p.name}</div>
+        <div class="prod-item-cat">${p.cat}</div>
+        <div class="prod-item-price">${p.price} · <span style="color:#16a34a;font-weight:700">${p.badge}</span>
+          ${imgSrc ? '<span style="color:#00aaff;font-size:9px;margin-left:6px">🖼️ Has image</span>' : '<span style="color:#94a3b8;font-size:9px;margin-left:6px">No image</span>'}
+        </div>
+      </div>
+      <div class="prod-actions">
+        <button class="btn-edit" onclick="editProduct(${p.id})">✏️ Edit</button>
+        <button class="btn-del" onclick="deleteProduct(${p.id})">🗑️</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function resolveImg(img) {
+  if (!img) return '';
+  if (img.startsWith('data:') || img.startsWith('http')) return img;
+  return `${SERVER_URL}/images/${img}`;
+}
+
+function openProductModal(id = null) {
+  editingId = id;
+  document.getElementById('modalTitle').textContent = id ? 'Edit Product' : 'Add New Product';
+  clearProductImg();
+  if (id) {
+    const p = DATA.products.find(x => x.id === id);
+    document.getElementById('pName').value = p.name;
+    document.getElementById('pCat').value = p.cat;
+    document.getElementById('pDesc').value = p.desc;
+    document.getElementById('pPrice').value = p.price;
+    document.getElementById('pBadge').value = p.badge;
+    document.getElementById('pSpec1').value = p.spec1 || '';
+    document.getElementById('pSpec2').value = p.spec2 || '';
+    document.getElementById('pSpec3').value = p.spec3 || '';
+    if (p.img) {
+      document.getElementById('pImgUrl').value = p.img;
+      showImgPreview(resolveImg(p.img));
+    }
+  } else {
+    ['pName','pDesc','pPrice','pBadge','pSpec1','pSpec2','pSpec3'].forEach(i => document.getElementById(i).value = '');
+    document.getElementById('pImgUrl').value = '';
+    document.getElementById('pCat').value = 'Platform Scale';
+  }
+  renderModalLibrary(uploadedImages);
+  document.getElementById('productModal').classList.add('open');
+}
+function editProduct(id) { openProductModal(id); }
+async function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  showSaving('Deleting...');
+  try {
+    const res    = await fetch(`${SERVER_URL}/api/api.php?action=delete_product`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({id, password: PASSWORD})
+    });
+    const result = await res.json();
+    hideSaving();
+    if (result.success) {
+      await reloadProducts();
+      showToast('🗑️ Deleted', 'Product removed from database.', 'success');
+    } else {
+      showToast('❌ Failed', result.message, 'error');
+    }
+  } catch(e) {
+    hideSaving();
+    showToast('❌ Error', 'Could not delete. Check MySQL is running.', 'error');
+  }
+}
+function closeModal() { document.getElementById('productModal').classList.remove('open'); }
+async function saveProduct() {
+  const name = document.getElementById('pName').value.trim();
+  if (!name) { alert('Please enter a product name'); return; }
+
+  const cat = document.getElementById('pCat').value;
+
+  // Get image value — NEVER store base64 in DB, only filename or URL
+  let imgVal = document.getElementById('pImgUrl').value.trim();
+  if (!imgVal || imgVal.startsWith('data:')) {
+    // base64 detected or empty — clear it, don't save to DB
+    imgVal = '';
+    if (document.getElementById('pImgUrl').value.startsWith('data:')) {
+      showToast('⚠️ Image Not Saved', 'Please use Upload File tab to upload image first, then save product.', 'error');
+      hideSaving();
+      return;
+    }
+  }
+
+  const prod = {
+    id:    editingId || null,
+    name,  cat,
+    desc:  document.getElementById('pDesc').value,
+    price: document.getElementById('pPrice').value,
+    badge: document.getElementById('pBadge').value,
+    spec1: document.getElementById('pSpec1').value,
+    spec2: document.getElementById('pSpec2').value,
+    spec3: document.getElementById('pSpec3').value,
+    img:   imgVal,
+    password: PASSWORD,
+  };
+
+  showSaving(editingId ? 'Updating product...' : 'Adding product...');
+  try {
+    const res = await fetch(`${SERVER_URL}/api/api.php?action=save_product`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(prod)
+    });
+    const result = await res.json();
+    hideSaving();
+    if (result.success) {
+      await reloadProducts();
+      closeModal();
+      showToast('✅ Product Saved!', `"${name}" saved to database successfully!`, 'success');
+    } else {
+      showToast('❌ Failed', result.message || 'Unknown error', 'error');
+    }
+  } catch(e) {
+    hideSaving();
+    showToast('❌ Error', 'Could not save. Make sure MySQL is running in XAMPP.', 'error');
+  }
+}
+
+let _uploadedImgData = '';
+function getCurrentUploadedImg() { return _uploadedImgData; }
+
+// ── Reload products from MySQL ──
+async function reloadProducts() {
+  try {
+    const res  = await fetch(`${SERVER_URL}/api/api.php?action=login`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: PASSWORD})
+    });
+    const data = await res.json();
+    if (data.success) {
+      DATA.products = data.products || [];
+      renderProducts();
+    }
+  } catch(e) { console.error('Reload failed', e); }
+}
+
+// ══════════════════════════════════════
+//  IMAGE METHODS
+// ══════════════════════════════════════
+function switchImgTab(tab, el) {
+  document.querySelectorAll('.img-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('imgTabUrl').style.display = tab === 'url' ? 'block' : 'none';
+  document.getElementById('imgTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
+}
+
+function onImgUrlChange(val) {
+  if (!val) { clearProductImg(); return; }
+  // Auto-detect short filename vs full URL
+  const src = (val.startsWith('http') || val.startsWith('data:')) ? val : `${SERVER_URL}/images/${val}`;
+  showImgPreview(src);
+}
+
+function previewImgUrl() {
+  const val = document.getElementById('pImgUrl').value.trim();
+  if (!val) return;
+  const src = (val.startsWith('http') || val.startsWith('data:')) ? val : `${SERVER_URL}/images/${val}`;
+  showImgPreview(src);
+}
+
+function showImgPreview(src) {
+  const box = document.getElementById('imgPreviewBox');
+  const img = document.getElementById('pImgPreview');
+  img.src = src;
+  box.classList.add('show');
+  document.getElementById('imgStatusMsg').innerHTML = `<span class="img-status loading">⏳ Loading...</span>`;
+  img.onload = () => { document.getElementById('imgStatusMsg').innerHTML = `<span class="img-status ok">✅ Image loaded successfully!</span>`; };
+  img.onerror = () => { document.getElementById('imgStatusMsg').innerHTML = `<span class="img-status err">❌ Image not found. Check the filename.</span>`; };
+}
+
+function clearProductImg() {
+  document.getElementById('pImgUrl').value = '';
+  document.getElementById('imgPreviewBox').classList.remove('show');
+  document.getElementById('pImgPreview').src = '';
+  document.getElementById('imgStatusMsg').innerHTML = '';
+  _uploadedImgData = '';
+}
+
+async function handleProductImgUpload(input) {
+  const file = input.files[0]; if (!file) return;
+
+  // Check file size — warn if over 2MB
+  const sizeMB = file.size / (1024 * 1024);
+  if (sizeMB > 5) {
+    showToast('❌ Too Large', `Image is ${sizeMB.toFixed(1)}MB. Max 5MB. Compress at tinypng.com first.`, 'error');
+    return;
+  }
+
+  const bar = document.getElementById('prodUploadBar');
+  bar.style.display = 'block'; bar.style.width = '20%';
+  document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status loading">⏳ Uploading to server...</span>';
+
+  const fname = file.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-]/g, '-');
+
+  try {
+    bar.style.width = '50%';
+    // Read as base64 then upload to server
+    const b64 = await fileToBase64(file);
+    bar.style.width = '75%';
+
+    const uploadRes = await uploadImageToServer(fname, b64);
+    bar.style.width = '100%';
+
+    if (uploadRes.success) {
+      // Store only filename — not base64!
+      document.getElementById('pImgUrl').value = fname;
+      showImgPreview(`${SERVER_URL}/images/${fname}`);
+      document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status ok">✅ Uploaded! Image saved to server.</span>';
+      showToast('✅ Uploaded!', `${fname} saved to images folder.`, 'success');
+      // Add to library
+      if (!uploadedImages.find(i => i.name === fname)) {
+        uploadedImages.push({name: fname, url: fname, size: file.size});
+      }
+      renderModalLibrary(uploadedImages);
+    } else {
+      document.getElementById('imgStatusMsg').innerHTML = `<span class="img-status err">❌ ${uploadRes.message}</span>`;
+      showToast('❌ Upload Failed', uploadRes.message || 'Try again.', 'error');
+    }
+  } catch(e) {
+    document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status err">❌ Upload failed. Check server connection.</span>';
+    showToast('❌ Error', 'Could not upload image.', 'error');
+  }
+  setTimeout(() => { bar.style.display = 'none'; bar.style.width = '0%'; }, 1200);
+}
+
+// ══════════════════════════════════════
+//  BULK UPLOAD (Image Manager)
+// ══════════════════════════════════════
+function handleBulkUpload(input) {
+  pendingUploads = Array.from(input.files);
+  if (!pendingUploads.length) return;
+  const list = document.getElementById('bulkList');
+  list.innerHTML = '';
+  pendingUploads.forEach((file, i) => {
+    const url = URL.createObjectURL(file);
+    list.innerHTML += `
+      <div class="bulk-item" id="bulk-${i}">
+        <img class="bulk-thumb" src="${url}" alt="">
+        <div class="bulk-info">
+          <div class="bulk-name">${file.name}</div>
+          <div class="bulk-size">${(file.size/1024).toFixed(1)} KB</div>
+          <div class="bulk-bar"><div class="bulk-bar-fill" id="bar-${i}"></div></div>
+        </div>
+        <span class="bulk-status" id="status-${i}">⏳</span>
+      </div>`;
+  });
+  document.getElementById('bulkActions').style.display = 'flex';
+  document.getElementById('uploadProgress').textContent = `${pendingUploads.length} images ready to upload`;
+}
+
+async function uploadAllImages() {
+  const btn = document.getElementById('btnUploadAll');
+  btn.disabled = true;
+  let done = 0, failed = 0;
+  for (let i = 0; i < pendingUploads.length; i++) {
+    const file = pendingUploads[i];
+    const bar = document.getElementById(`bar-${i}`);
+    const status = document.getElementById(`status-${i}`);
+    bar.style.width = '40%';
+    try {
+      const b64 = await fileToBase64(file);
+      bar.style.width = '80%';
+      const fname = file.name.toLowerCase().replace(/\s+/g, '-');
+      const result = await uploadImageToServer(fname, b64);
+      bar.style.width = '100%';
+      if (result.success) {
+        status.textContent = '✅';
+        status.className = 'bulk-status done';
+        done++;
+        if (!uploadedImages.find(img => img.name === fname)) {
+          uploadedImages.push({ name: fname, url: fname, size: file.size });
+        }
+      } else {
+        status.textContent = '❌';
+        status.className = 'bulk-status fail';
+        failed++;
+      }
+    } catch {
+      status.textContent = '❌';
+      status.className = 'bulk-status fail';
+      failed++;
+    }
+    document.getElementById('uploadProgress').textContent = `Uploaded ${i+1} of ${pendingUploads.length}...`;
+  }
+  btn.disabled = false;
+  document.getElementById('uploadProgress').textContent = `✅ Done! ${done} uploaded, ${failed} failed`;
+  renderGallery(uploadedImages);
+  showToast(`✅ ${done} images uploaded!`, failed > 0 ? `${failed} failed — check file names` : 'All images saved to server.', 'success');
+  // Save image list to server
+  DATA.images = uploadedImages;
+  saveAll();
+}
+
+async function uploadImageToServer(filename, base64Data) {
+  const res = await fetch(`${SERVER_URL}/api/api.php?action=upload_image`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ password: PASSWORD, filename, data: base64Data })
+  });
+  return await res.json();
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// ══════════════════════════════════════
+//  IMAGE GALLERY
+// ══════════════════════════════════════
+async function refreshGallery() {
+  showToast('🔄 Loading...', 'Fetching images from server...', '');
+  try {
+    const res  = await fetch(`${SERVER_URL}/api/api.php?action=list_images&v=${Date.now()}`, { cache: 'no-store' });
+    const data = await res.json();
+    if (data.success && data.images) {
+      uploadedImages = data.images.map(name => ({ name, url: name }));
+      renderGallery(uploadedImages);
+      renderModalLibrary(uploadedImages);
+      showToast(`✅ ${uploadedImages.length} images found`, 'Image library loaded.', 'success');
+    }
+  } catch(e) {
+    renderGallery(uploadedImages);
+    showToast('⚠️ Could not load images', 'Check MySQL and Apache are running.', '');
+  }
+}
+
+function renderGallery(imgs) {
+  const grid = document.getElementById('galleryGrid');
+  if (!imgs || !imgs.length) {
+    grid.innerHTML = '<div class="gallery-empty">📭 No images found. Upload images above or click Refresh after uploading via GoDaddy File Manager.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  imgs.forEach(img => {
+    const src = img.url && (img.url.startsWith('http') || img.url.startsWith('data:')) ? img.url : `${SERVER_URL}/images/${img.name}`;
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.innerHTML = `
+      <img src="${src}" alt="${img.name}" onerror="this.parentElement.style.display='none'">
+      <div class="gallery-item-name">${img.name}</div>
+      <button class="copy-url" onclick="event.stopPropagation();copyImgUrl('${img.name}')">Copy URL</button>`;
+    div.addEventListener('click', () => selectFromGallery(img.name, src));
+    grid.appendChild(div);
+  });
+}
+
+function filterGallery(q) {
+  const filtered = q ? uploadedImages.filter(i => i.name.toLowerCase().includes(q.toLowerCase())) : uploadedImages;
+  renderGallery(filtered);
+}
+
+function copyImgUrl(name) {
+  const url = `${SERVER_URL}/images/${name}`;
+  navigator.clipboard.writeText(url).then(() => showToast('📋 Copied!', url, 'success'));
+}
+
+function selectFromGallery(name, src) {
+  // If modal is open, select into product
+  if (document.getElementById('productModal').classList.contains('open')) {
+    document.getElementById('pImgUrl').value = name;
+    showImgPreview(src);
+    showToast('✅ Selected!', `${name} selected for product.`, 'success');
+  } else {
+    copyImgUrl(name);
+  }
+}
+
+// ══════════════════════════════════════
+//  MODAL LIBRARY
+// ══════════════════════════════════════
+function renderModalLibrary(imgs) {
+  const grid = document.getElementById('modalImgGrid');
+  if (!imgs || !imgs.length) {
+    grid.innerHTML = '<div class="img-grid-empty">No images yet. Go to Image Manager to upload.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  imgs.slice(0, 50).forEach(img => { // show first 50 in modal
+    const src = img.url && img.url.startsWith('http') ? img.url : `${SERVER_URL}/images/${img.name}`;
+    const div = document.createElement('div');
+    div.className = 'img-grid-item';
+    div.innerHTML = `<img src="${src}" alt="${img.name}" onerror="this.parentElement.style.display='none'"><div class="img-name">${img.name}</div>`;
+    div.addEventListener('click', () => {
+      document.querySelectorAll('.img-grid-item').forEach(i => i.classList.remove('selected'));
+      div.classList.add('selected');
+      document.getElementById('pImgUrl').value = img.name;
+      showImgPreview(src);
+    });
+    grid.appendChild(div);
+  });
+}
+
+function filterModalLib(q) {
+  const filtered = q ? uploadedImages.filter(i => i.name.toLowerCase().includes(q.toLowerCase())) : uploadedImages;
+  renderModalLibrary(filtered);
+}
+
+// ══════════════════════════════════════
+//  SLIDER
+// ══════════════════════════════════════
+function renderSlider() {
+  const el = document.getElementById('sliderItems');
+  el.innerHTML = '';
+  (DATA.slides || []).forEach((s, i) => {
+    const bgSrc = s.bg && s.bg.startsWith('data:') ? s.bg : (s.bg ? `${SERVER_URL}/images/${s.bg}` : '');
+    el.innerHTML += `
+    <div class="slide-item">
+      <div class="slide-num">${s.num}</div>
+      <div class="slide-fields">
+        <div class="field"><label>Title</label><input type="text" value="${s.title||''}" onchange="DATA.slides[${i}].title=this.value"></div>
+        <div class="field"><label>Pill Label</label><input type="text" value="${s.subtitle||''}" onchange="DATA.slides[${i}].subtitle=this.value"></div>
+        <div class="field"><label>Description</label><input type="text" value="${s.desc||''}" onchange="DATA.slides[${i}].desc=this.value"></div>
+        <div class="field"><label>Badge Value</label><input type="text" value="${s.badge||''}" onchange="DATA.slides[${i}].badge=this.value"></div>
+        <div class="field"><label>Button 1 Text</label><input type="text" value="${s.btn1||''}" onchange="DATA.slides[${i}].btn1=this.value"></div>
+        <div class="field"><label>Button 2 Text</label><input type="text" value="${s.btn2||''}" onchange="DATA.slides[${i}].btn2=this.value"></div>
+        <div class="field" style="grid-column:1/-1">
+          <label>Background Image (filename or full URL)</label>
+          <input type="text" value="${s.bg||''}" placeholder="slide-bg-1.jpg" onchange="DATA.slides[${i}].bg=this.value;updateSlidePrev(${i},this.value)">
+          <img class="slide-img-preview ${bgSrc?'show':''}" id="slideP${i}" src="${bgSrc}">
+        </div>
+      </div>
+    </div>`;
+  });
+}
+function updateSlidePrev(i, val) {
+  const img = document.getElementById(`slideP${i}`);
+  const src = val.startsWith('http') ? val : `${SERVER_URL}/images/${val}`;
+  img.src = src; img.classList.add('show');
+}
+
+// ══════════════════════════════════════
+//  CATEGORIES
+// ══════════════════════════════════════
+function renderCategories() {
+  const el = document.getElementById('catList');
+  el.innerHTML = '';
+  (DATA.categories || []).forEach((c, i) => {
+    el.innerHTML += `
+    <div class="prod-item">
+      <div class="prod-thumb" style="font-size:22px;background:var(--off)">${c.emoji}</div>
+      <div class="prod-info" style="display:grid;grid-template-columns:70px 1fr 130px;gap:10px;align-items:center">
+        <div class="field" style="margin:0"><label>Icon</label><input type="text" value="${c.emoji}" style="font-size:16px;text-align:center" onchange="DATA.categories[${i}].emoji=this.value;renderCategories()"></div>
+        <div class="field" style="margin:0"><label>Name</label><input type="text" value="${c.name}" onchange="DATA.categories[${i}].name=this.value"></div>
+        <div class="field" style="margin:0"><label>Count Text</label><input type="text" value="${c.count}" onchange="DATA.categories[${i}].count=this.value"></div>
+      </div>
+    </div>`;
+  });
+}
+
+// ══════════════════════════════════════
+//  TESTIMONIALS
+// ══════════════════════════════════════
+function renderTestimonials() {
+  const el = document.getElementById('testiList');
+  el.innerHTML = '';
+  (DATA.testimonials || []).forEach((t, i) => {
+    el.innerHTML += `
+    <div class="card" style="margin:0">
+      <div class="form-grid">
+        <div class="field"><label>Customer Name</label><input type="text" value="${t.name}" onchange="DATA.testimonials[${i}].name=this.value"></div>
+        <div class="field"><label>Role / Company</label><input type="text" value="${t.role}" onchange="DATA.testimonials[${i}].role=this.value"></div>
+        <div class="field form-full"><label>Review Text</label><textarea onchange="DATA.testimonials[${i}].text=this.value">${t.text}</textarea></div>
+        <div class="field"><label>Stars</label>
+          <select onchange="DATA.testimonials[${i}].stars=parseInt(this.value)">
+            ${[5,4,3,2,1].map(n=>`<option ${t.stars===n?'selected':''}>${n} Stars</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>`;
+  });
+}
+
+// ══════════════════════════════════════
+//  COMPANY & STATS
+// ══════════════════════════════════════
+function renderCompany() {
+  const c = DATA.company || {};
+  ['cName','cTagline','cPhone','cWA','cEmail','cDomain','cAddr','cAbout'].forEach((id,i) => {
+    const keys = ['name','tagline','phone','whatsapp','email','domain','address','about'];
+    const el = document.getElementById(id);
+    if (el) el.value = c[keys[i]] || '';
+  });
+}
+function renderStats() {
+  const el = document.getElementById('statsList');
+  el.innerHTML = '';
+  (DATA.stats || []).forEach((s, i) => {
+    el.innerHTML += `
+      <div class="field"><label>Stat ${i+1} Number</label><input type="text" value="${s.num}" onchange="DATA.stats[${i}].num=this.value"></div>
+      <div class="field"><label>Stat ${i+1} Label</label><input type="text" value="${s.label}" onchange="DATA.stats[${i}].label=this.value"></div>`;
+  });
+}
+
+// ══════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════
+function showSaving(text) {
+  document.getElementById('savingText').textContent = text || 'Saving...';
+  document.getElementById('savingOverlay').classList.add('show');
+}
+function hideSaving() { document.getElementById('savingOverlay').classList.remove('show'); }
+
+function showToast(title, msg, type = '') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastTitle').textContent = title;
+  document.getElementById('toastMsg').textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey||e.metaKey) && e.key==='s') { e.preventDefault(); saveAll(); }
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
