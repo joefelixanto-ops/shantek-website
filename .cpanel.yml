@@ -2,5 +2,5 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/d69ps2gpuotf/public_html/shantek
-    - /bin/cp -R %PROJECT_ROOT%/. $DEPLOYPATH
-    - /bin/chmod -R 755 $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -af %PROJECT_ROOT%/. $DEPLOYPATH/
