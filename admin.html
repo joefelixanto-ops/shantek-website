@@ -247,11 +247,10 @@ body{font-family:'Montserrat',sans-serif;background:var(--off);color:var(--text)
     <button class="btn-login" onclick="doLogin()">🔐 Login & Connect</button>
     <div class="login-error" id="loginError"></div>
     <div class="login-note">
-      💡 <strong>Local XAMPP:</strong> <code style="background:rgba(37,99,200,.1);padding:2px 6px;border-radius:4px;color:#2563c8">http://localhost/shantek</code><br>
-      🌐 <strong>Live GoDaddy:</strong> <code style="background:rgba(37,99,200,.1);padding:2px 6px;border-radius:4px;color:#2563c8">https://genzdgltech.com/shantek</code><br>
-      🔑 <strong>Password:</strong> shantek123 &nbsp;|&nbsp; Make sure MySQL is running!
+      💡 Enter your full website URL above<br>
+      Default password: <strong>shantek123</strong><br>
+      Make sure <strong>save.php</strong> is uploaded to your server
     </div>
-    <div id="debugInfo" style="margin-top:10px;font-size:10px;color:#94a3b8;text-align:left;display:none;padding:8px;background:#f8fafc;border-radius:6px;word-break:break-all"></div>
   </div>
 </div>
 
@@ -528,53 +527,36 @@ const BGGRD  = {'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Anal
 //  LOGIN
 // ══════════════════════════════════════
 async function doLogin() {
-  const url  = document.getElementById('serverUrl').value.trim().replace(/\/+$/, '');
+  const url = document.getElementById('serverUrl').value.trim().replace(/\/$/,'');
   const pass = document.getElementById('loginPass').value.trim();
-  if (!url)  { showLoginErr('Please enter your website URL'); return; }
+  if (!url) { showLoginErr('Please enter your website URL'); return; }
   if (!pass) { showLoginErr('Please enter your password'); return; }
-
-  let fixedUrl = url;
-  if (!fixedUrl.startsWith('http')) fixedUrl = 'https://' + fixedUrl;
-  fixedUrl = fixedUrl.replace(/\/+$/, '');
-  document.getElementById('serverUrl').value = fixedUrl;
-
   showSaving('Connecting to server...');
   try {
-    const res  = await fetch(fixedUrl + '/api/api.php?action=login', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({password: pass})
-    });
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message || 'Wrong password');
-
-    SERVER_URL = fixedUrl;
-    PASSWORD   = pass;
-    DATA       = data;
-
-    document.getElementById('imgFolderHint').textContent = fixedUrl.replace('https://','').replace('http://','') + '/images/';
+    const res = await fetch(`${url}/save.php?v=${Date.now()}`, { cache:'no-store' });
+    if (!res.ok) throw new Error('not ok');
+    DATA = await res.json();
+    SERVER_URL = url;
+    PASSWORD = pass;
+    // Update image folder hint
+    document.getElementById('imgFolderHint').textContent = url.replace('https://','').replace('http://','') + '/images/';
     hideSaving();
     document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminApp').style.display    = 'block';
-    document.getElementById('connText').textContent = fixedUrl.replace('https://','').replace('http://','');
-    if (DATA.images) uploadedImages = DATA.images;
+    document.getElementById('adminApp').style.display = 'block';
+    document.getElementById('connText').textContent = url.replace('https://','').replace('http://','');
+    if (DATA.lastUpdated) document.getElementById('lastSaved').textContent = 'Saved: ' + DATA.lastUpdated;
+    // Load image library
+    if (DATA.images) { uploadedImages = DATA.images; }
     renderAll();
-    showToast('✅ Connected!', 'Loaded from MySQL database.', 'success');
+    showToast('✅ Connected!', 'Loaded data from your live website.', 'success');
   } catch(e) {
     hideSaving();
-    showLoginErr(e.message || 'Cannot connect. Check URL and make sure MySQL is running.');
+    showLoginErr('Cannot connect. Check URL and make sure save.php is uploaded.');
   }
 }
 function showLoginErr(msg) {
   const el = document.getElementById('loginError');
   el.textContent = '❌ ' + msg; el.style.display = 'block';
-  // Show debug info
-  const dbg = document.getElementById('debugInfo');
-  if (dbg) {
-    const url = document.getElementById('serverUrl').value;
-    dbg.innerHTML = '🔍 Tried: <strong>' + url + '/save.php</strong><br>Error: ' + msg;
-    dbg.style.display = 'block';
-  }
 }
 function doLogout() {
   SERVER_URL = ''; PASSWORD = ''; DATA = {};
@@ -589,21 +571,21 @@ function doLogout() {
 // ══════════════════════════════════════
 async function saveAll() {
   collectFormData();
-  showSaving('Saving company info...');
+  DATA.images = uploadedImages;
+  showSaving('Publishing to live website...');
   document.getElementById('saveBtn').disabled = true;
   try {
-    const res = await fetch(`${SERVER_URL}/api/api.php?action=save_company`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({...DATA.company, password: PASSWORD})
+    const res = await fetch(`${SERVER_URL}/save.php`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({...DATA, password: PASSWORD})
     });
     const result = await res.json();
     hideSaving();
     document.getElementById('saveBtn').disabled = false;
-    const now = new Date().toLocaleTimeString();
     if (result.success) {
-      document.getElementById('lastSaved').textContent = 'Saved: ' + now;
-      showToast('🚀 Saved!', 'Changes saved to database.', 'success');
+      document.getElementById('lastSaved').textContent = 'Saved: ' + result.time;
+      showToast('🚀 Published Live!', 'Your website updated successfully.', 'success');
     } else {
       showToast('❌ Failed', result.message, 'error');
     }
@@ -729,100 +711,45 @@ function openProductModal(id = null) {
   document.getElementById('productModal').classList.add('open');
 }
 function editProduct(id) { openProductModal(id); }
-async function deleteProduct(id) {
+function deleteProduct(id) {
   if (!confirm('Delete this product?')) return;
-  showSaving('Deleting...');
-  try {
-    const res    = await fetch(`${SERVER_URL}/api/api.php?action=delete_product`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({id, password: PASSWORD})
-    });
-    const result = await res.json();
-    hideSaving();
-    if (result.success) {
-      await reloadProducts();
-      showToast('🗑️ Deleted', 'Product removed from database.', 'success');
-    } else {
-      showToast('❌ Failed', result.message, 'error');
-    }
-  } catch(e) {
-    hideSaving();
-    showToast('❌ Error', 'Could not delete. Check MySQL is running.', 'error');
-  }
+  DATA.products = DATA.products.filter(p => p.id !== id);
+  renderProducts();
+  showToast('🗑️ Deleted','Product removed. Click Save & Publish.','success');
 }
 function closeModal() { document.getElementById('productModal').classList.remove('open'); }
-async function saveProduct() {
+function saveProduct() {
   const name = document.getElementById('pName').value.trim();
   if (!name) { alert('Please enter a product name'); return; }
-
   const cat = document.getElementById('pCat').value;
-
-  // Get image value — NEVER store base64 in DB, only filename or URL
-  let imgVal = document.getElementById('pImgUrl').value.trim();
-  if (!imgVal || imgVal.startsWith('data:')) {
-    // base64 detected or empty — clear it, don't save to DB
-    imgVal = '';
-    if (document.getElementById('pImgUrl').value.startsWith('data:')) {
-      showToast('⚠️ Image Not Saved', 'Please use Upload File tab to upload image first, then save product.', 'error');
-      hideSaving();
-      return;
-    }
-  }
-
+  const imgVal = document.getElementById('pImgUrl').value.trim() || getCurrentUploadedImg();
   const prod = {
-    id:    editingId || null,
-    name,  cat,
+    id: editingId || Date.now(),
+    name, cat,
     desc:  document.getElementById('pDesc').value,
     price: document.getElementById('pPrice').value,
     badge: document.getElementById('pBadge').value,
     spec1: document.getElementById('pSpec1').value,
     spec2: document.getElementById('pSpec2').value,
     spec3: document.getElementById('pSpec3').value,
+    emoji: EMOJIS[cat] || '📦',
+    bg:    BGGRD[cat] || 'linear-gradient(135deg,#e8f0fe,#c7d9ff)',
     img:   imgVal,
-    password: PASSWORD,
   };
-
-  showSaving(editingId ? 'Updating product...' : 'Adding product...');
-  try {
-    const res = await fetch(`${SERVER_URL}/api/api.php?action=save_product`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(prod)
-    });
-    const result = await res.json();
-    hideSaving();
-    if (result.success) {
-      await reloadProducts();
-      closeModal();
-      showToast('✅ Product Saved!', `"${name}" saved to database successfully!`, 'success');
-    } else {
-      showToast('❌ Failed', result.message || 'Unknown error', 'error');
-    }
-  } catch(e) {
-    hideSaving();
-    showToast('❌ Error', 'Could not save. Make sure MySQL is running in XAMPP.', 'error');
+  if (editingId) {
+    const idx = DATA.products.findIndex(p => p.id === editingId);
+    DATA.products[idx] = prod;
+  } else {
+    if (!DATA.products) DATA.products = [];
+    DATA.products.push(prod);
   }
+  renderProducts();
+  closeModal();
+  showToast('✅ Product Saved', `"${name}" saved. Click Publish to go live.`, 'success');
 }
 
 let _uploadedImgData = '';
 function getCurrentUploadedImg() { return _uploadedImgData; }
-
-// ── Reload products from MySQL ──
-async function reloadProducts() {
-  try {
-    const res  = await fetch(`${SERVER_URL}/api/api.php?action=login`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({password: PASSWORD})
-    });
-    const data = await res.json();
-    if (data.success) {
-      DATA.products = data.products || [];
-      renderProducts();
-    }
-  } catch(e) { console.error('Reload failed', e); }
-}
 
 // ══════════════════════════════════════
 //  IMAGE METHODS
@@ -866,51 +793,40 @@ function clearProductImg() {
   _uploadedImgData = '';
 }
 
-async function handleProductImgUpload(input) {
+function handleProductImgUpload(input) {
   const file = input.files[0]; if (!file) return;
-
-  // Check file size — warn if over 2MB
-  const sizeMB = file.size / (1024 * 1024);
-  if (sizeMB > 5) {
-    showToast('❌ Too Large', `Image is ${sizeMB.toFixed(1)}MB. Max 5MB. Compress at tinypng.com first.`, 'error');
-    return;
-  }
-
   const bar = document.getElementById('prodUploadBar');
-  bar.style.display = 'block'; bar.style.width = '20%';
-  document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status loading">⏳ Uploading to server...</span>';
-
-  const fname = file.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-]/g, '-');
-
-  try {
-    bar.style.width = '50%';
-    // Read as base64 then upload to server
-    const b64 = await fileToBase64(file);
-    bar.style.width = '75%';
-
-    const uploadRes = await uploadImageToServer(fname, b64);
-    bar.style.width = '100%';
-
-    if (uploadRes.success) {
-      // Store only filename — not base64!
-      document.getElementById('pImgUrl').value = fname;
-      showImgPreview(`${SERVER_URL}/images/${fname}`);
-      document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status ok">✅ Uploaded! Image saved to server.</span>';
-      showToast('✅ Uploaded!', `${fname} saved to images folder.`, 'success');
-      // Add to library
-      if (!uploadedImages.find(i => i.name === fname)) {
-        uploadedImages.push({name: fname, url: fname, size: file.size});
+  bar.style.display = 'block'; bar.style.width = '30%';
+  const reader = new FileReader();
+  reader.onload = async e => {
+    bar.style.width = '70%';
+    // Try to upload to server
+    const fname = file.name.toLowerCase().replace(/\s+/g, '-');
+    try {
+      const uploadRes = await uploadImageToServer(fname, e.target.result);
+      bar.style.width = '100%';
+      if (uploadRes.success) {
+        const url = fname;
+        document.getElementById('pImgUrl').value = url;
+        showImgPreview(`${SERVER_URL}/images/${fname}`);
+        showToast('✅ Uploaded!', `${fname} saved to server.`, 'success');
+        // Add to library
+        if (!uploadedImages.find(i => i.name === fname)) {
+          uploadedImages.push({name: fname, url: fname, size: file.size});
+        }
+      } else {
+        // Fallback: use base64
+        _uploadedImgData = e.target.result;
+        showImgPreview(e.target.result);
+        showToast('⚠️ Stored locally', 'Image saved in data. For best performance, use images folder.', '');
       }
-      renderModalLibrary(uploadedImages);
-    } else {
-      document.getElementById('imgStatusMsg').innerHTML = `<span class="img-status err">❌ ${uploadRes.message}</span>`;
-      showToast('❌ Upload Failed', uploadRes.message || 'Try again.', 'error');
+    } catch {
+      _uploadedImgData = e.target.result;
+      showImgPreview(e.target.result);
     }
-  } catch(e) {
-    document.getElementById('imgStatusMsg').innerHTML = '<span class="img-status err">❌ Upload failed. Check server connection.</span>';
-    showToast('❌ Error', 'Could not upload image.', 'error');
-  }
-  setTimeout(() => { bar.style.display = 'none'; bar.style.width = '0%'; }, 1200);
+    setTimeout(() => { bar.style.display = 'none'; bar.style.width = '0%'; }, 1000);
+  };
+  reader.readAsDataURL(file);
 }
 
 // ══════════════════════════════════════
@@ -982,7 +898,7 @@ async function uploadAllImages() {
 }
 
 async function uploadImageToServer(filename, base64Data) {
-  const res = await fetch(`${SERVER_URL}/api/api.php?action=upload_image`, {
+  const res = await fetch(`${SERVER_URL}/upload.php`, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ password: PASSWORD, filename, data: base64Data })
@@ -1005,17 +921,18 @@ function fileToBase64(file) {
 async function refreshGallery() {
   showToast('🔄 Loading...', 'Fetching images from server...', '');
   try {
-    const res  = await fetch(`${SERVER_URL}/api/api.php?action=list_images&v=${Date.now()}`, { cache: 'no-store' });
+    const res = await fetch(`${SERVER_URL}/list-images.php?v=${Date.now()}`, { cache: 'no-store' });
     const data = await res.json();
-    if (data.success && data.images) {
+    if (data.images) {
       uploadedImages = data.images.map(name => ({ name, url: name }));
+      DATA.images = uploadedImages;
       renderGallery(uploadedImages);
-      renderModalLibrary(uploadedImages);
-      showToast(`✅ ${uploadedImages.length} images found`, 'Image library loaded.', 'success');
+      showToast(`✅ ${uploadedImages.length} images found`, 'Image library loaded from server.', 'success');
     }
-  } catch(e) {
+  } catch {
+    // Fall back to stored list
     renderGallery(uploadedImages);
-    showToast('⚠️ Could not load images', 'Check MySQL and Apache are running.', '');
+    showToast('⚠️ Using cached list', 'Upload list-images.php for live scanning.', '');
   }
 }
 

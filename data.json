@@ -65,6 +65,48 @@
             "emoji": "\ud83c\udf21\ufe0f",
             "img": "",
             "bg": "linear-gradient(135deg,#fde8e8,#ffbdbd)"
+        },
+        {
+            "id": 1772909234189,
+            "name": "Test new",
+            "cat": "Jewellery Scale",
+            "desc": "tesrxzcvadbdf",
+            "price": "120000",
+            "badge": "NEW",
+            "spec1": "150",
+            "spec2": "10",
+            "spec3": "232",
+            "emoji": "\ud83d\udc8e",
+            "bg": "linear-gradient(135deg,#f3e8ff,#ddb6ff)",
+            "img": ""
+        },
+        {
+            "id": 1772911221629,
+            "name": "Test Img 2",
+            "cat": "Analytical Balance",
+            "desc": "dgcghvh",
+            "price": "12",
+            "badge": "new",
+            "spec1": "140",
+            "spec2": "5g",
+            "spec3": "232",
+            "emoji": "\ud83d\udd2c",
+            "bg": "linear-gradient(135deg,#e0f7ea,#b8eecb)",
+            "img": "https:\/\/genzdgltech.com\/shantek\/images\/analytical-balance.png"
+        },
+        {
+            "id": 1772911666315,
+            "name": "Test 3",
+            "cat": "Medical Scale",
+            "desc": "ZDBXkhsBc",
+            "price": "120",
+            "badge": "etc",
+            "spec1": "123",
+            "spec2": "5g",
+            "spec3": "232",
+            "emoji": "\ud83d\udc8a",
+            "bg": "linear-gradient(135deg,#fef3e2,#fde1b0)",
+            "img": "https:\/\/genzdgltech.com\/shantek\/images\/baby-scale.png"
         }
     ],
     "slides": [
@@ -179,7 +221,7 @@
             "label": "Satisfaction"
         }
     ],
-    "lastUpdated": "2026-03-09 18:51:57",
+    "lastUpdated": "2026-03-07 19:30:23",
     "images": [
         {
             "name": "analytical-balance.png",
