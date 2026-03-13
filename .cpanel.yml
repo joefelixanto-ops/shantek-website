@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/your-godaddy-username/public_html/shantek
+    - /bin/cp -R %PROJECT_ROOT%/* $DEPLOYPATH
+    
