@@ -660,6 +660,112 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
 .cat-emoji img.emoji{height:40px;width:40px;margin:0;vertical-align:middle}
 .prod-img-icon img.emoji{height:72px;width:72px;margin:0;vertical-align:middle}
 
+/* ══════════ GET QUOTE MODAL ══════════ */
+.quote-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(10,22,40,.72);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.quote-overlay.open {
+  opacity: 1; pointer-events: all;
+}
+.quote-modal {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%; max-width: 520px;
+  box-shadow: 0 40px 100px rgba(10,22,40,.35);
+  overflow: hidden;
+  transform: translateY(28px) scale(.97);
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
+  position: relative;
+}
+.quote-overlay.open .quote-modal {
+  transform: translateY(0) scale(1);
+}
+.quote-modal-header {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #0e2d5a 100%);
+  padding: 28px 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.quote-modal-header::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 200' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='520' cy='100' r='160' stroke='white' stroke-width='.5' opacity='.08'/%3E%3Ccircle cx='520' cy='100' r='110' stroke='white' stroke-width='.5' opacity='.06'/%3E%3C/svg%3E") right center / auto 100% no-repeat;
+  pointer-events: none;
+}
+.quote-modal-header .modal-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent);
+  margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+}
+.quote-modal-header .modal-label::before { content: ''; width: 18px; height: 2px; background: var(--accent); border-radius: 2px; }
+.quote-modal-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; color: var(--white); margin-bottom: 6px; line-height: 1.2;
+  position: relative; z-index: 1;
+}
+.quote-modal-header p {
+  font-size: 12px; color: rgba(255,255,255,.55); position: relative; z-index: 1;
+}
+.quote-close {
+  position: absolute; top: 18px; right: 18px; z-index: 2;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.7); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s; line-height: 1;
+}
+.quote-close:hover { background: rgba(255,255,255,.2); color: #fff; }
+.quote-modal-body { padding: 28px 32px 32px; }
+.quote-field { margin-bottom: 16px; }
+.quote-field label {
+  display: block; font-size: 11px; font-weight: 700;
+  letter-spacing: .5px; color: var(--blue-dark); margin-bottom: 6px;
+}
+.quote-field label span { color: var(--sky); }
+.quote-input, .quote-select, .quote-textarea {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--gray-light); border-radius: 9px;
+  font-family: 'Montserrat', sans-serif; font-size: 13px;
+  color: var(--text); background: var(--white);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+  appearance: none; -webkit-appearance: none;
+}
+.quote-input:focus, .quote-select:focus, .quote-textarea:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+}
+.quote-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 36px; cursor: pointer; }
+.quote-textarea { resize: vertical; min-height: 80px; }
+.quote-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.quote-submit {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--blue-light), var(--sky));
+  color: #fff; border: none; border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: .8px;
+  text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 6px 22px rgba(37,99,200,.35);
+  transition: all .25s; margin-top: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.quote-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,200,.45); }
+.quote-submit:active { transform: translateY(0); }
+.quote-note {
+  text-align: center; font-size: 10px; color: var(--gray);
+  margin-top: 12px; line-height: 1.6;
+}
+
+@media (max-width: 540px) {
+  .quote-modal-header { padding: 22px 22px 18px; }
+  .quote-modal-body { padding: 20px 22px 24px; }
+  .quote-row { grid-template-columns: 1fr; gap: 0; }
+}
 </style>
 </head>
 <body>
@@ -696,7 +802,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       </div>
     </a>
     <nav class="desktop-nav">
-      <a href="#" class="active">JOE</a>
+      <a href="#" class="active">Home</a>
       <a href="#products">Products</a>
       <a href="#categories">Categories</a>
       <a href="#about">About Us</a>
@@ -704,7 +810,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </nav>
     <div class="header-actions">
       <a href="catalogue/shantek-catalogue.pdf" download class="btn-outline">Catalogue</a>
-      <button class="btn-primary-sm" onclick="showToast('Enquiry Sent!', 'We\'ll call you within 2 hours.')">Get Quote</button>
+      <button class="btn-primary-sm" onclick="openQuoteModal()">Get Quote</button>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -714,13 +820,13 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
 
 <!-- MOBILE MENU -->
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="#" onclick="closeMenu()">JOE</a>
+  <a href="#" onclick="closeMenu()">Home</a>
   <a href="#products" onclick="closeMenu()">Products</a>
   <a href="#categories" onclick="closeMenu()">Categories</a>
   <a href="#about" onclick="closeMenu()">About Us</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-actions">
-    <button class="btn-mobile-primary" onclick="showToast('Enquiry Sent!','We\'ll call you within 2 hours.'); closeMenu();">Get a Free Quote</button>
+    <button class="btn-mobile-primary" onclick="openQuoteModal(); closeMenu();">Get a Free Quote</button>
     <a href="catalogue/shantek-catalogue.pdf" download class="btn-mobile-outline">Download Catalogue</a>
   </div>
   <div class="mobile-contact-info">
@@ -1117,7 +1223,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© Joe felix anto changes  Pvt. Ltd. All rights reserved.</p>
+    <p>© 2025 Shantek Instruments Pvt. Ltd. All rights reserved.</p>
     <div class="certs">
       <span class="cert">ISO 9001:2015</span>
       <span class="cert">NABL</span>
@@ -1210,6 +1316,103 @@ function showToast(title, msg) {
 }
 </script>
 
+<!-- GET QUOTE MODAL -->
+<div class="quote-overlay" id="quoteOverlay" onclick="handleOverlayClick(event)">
+  <div class="quote-modal" id="quoteModal">
+    <div class="quote-modal-header">
+      <button class="quote-close" onclick="closeQuoteModal()" aria-label="Close">✕</button>
+      <div class="modal-label">Free Consultation</div>
+      <h3>Get a Quote</h3>
+      <p>Fill in your details and we'll respond within 2 business hours.</p>
+    </div>
+    <div class="quote-modal-body">
+      <div class="quote-row">
+        <div class="quote-field">
+          <label>Full Name <span>*</span></label>
+          <input type="text" class="quote-input" id="qName" placeholder="Your name">
+        </div>
+        <div class="quote-field">
+          <label>Phone Number <span>*</span></label>
+          <input type="tel" class="quote-input" id="qPhone" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+      <div class="quote-field">
+        <label>Email Address</label>
+        <input type="email" class="quote-input" id="qEmail" placeholder="you@company.com">
+      </div>
+      <div class="quote-row">
+        <div class="quote-field">
+          <label>Product / Category <span>*</span></label>
+          <select class="quote-select" id="qProduct">
+            <option value="" disabled selected>Select product type</option>
+            <option>Platform Scales</option>
+            <option>Analytical Balances</option>
+            <option>Medical Scales</option>
+            <option>Jewellery Scales</option>
+            <option>Crane Scales</option>
+            <option>Moisture Analysers</option>
+            <option>Bench Scales</option>
+            <option>Floor Scales</option>
+            <option>Other / Not Sure</option>
+          </select>
+        </div>
+        <div class="quote-field">
+          <label>Quantity Required</label>
+          <input type="number" class="quote-input" id="qQty" placeholder="e.g. 5" min="1">
+        </div>
+      </div>
+      <div class="quote-field">
+        <label>Message / Specifications</label>
+        <textarea class="quote-textarea" id="qMessage" placeholder="Describe your requirements, capacity needed, or any specific features…"></textarea>
+      </div>
+      <button class="quote-submit" onclick="submitQuoteForm()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send My Quote Request
+      </button>
+      <p class="quote-note">🔒 Your details are safe with us. No spam, ever.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function openQuoteModal() {
+  document.getElementById('quoteOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeQuoteModal() {
+  document.getElementById('quoteOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('quoteOverlay')) closeQuoteModal();
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeQuoteModal();
+});
+function submitQuoteForm() {
+  const name    = document.getElementById('qName').value.trim();
+  const phone   = document.getElementById('qPhone').value.trim();
+  const product = document.getElementById('qProduct').value;
+  if (!name) { document.getElementById('qName').focus(); showToast('Required', 'Please enter your name.'); return; }
+  if (!phone) { document.getElementById('qPhone').focus(); showToast('Required', 'Please enter your phone number.'); return; }
+  if (!product) { document.getElementById('qProduct').focus(); showToast('Required', 'Please select a product type.'); return; }
+  const email   = document.getElementById('qEmail').value.trim();
+  const qty     = document.getElementById('qQty').value.trim();
+  const message = document.getElementById('qMessage').value.trim();
+  const wa = SITE.whatsapp || '912212345678';
+  let text = `Hello! I'd like to request a quote.\n\n*Name:* ${name}\n*Phone:* ${phone}`;
+  if (email)   text += `\n*Email:* ${email}`;
+  text += `\n*Product:* ${product}`;
+  if (qty)     text += `\n*Quantity:* ${qty}`;
+  if (message) text += `\n*Message:* ${message}`;
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(text)}`, '_blank');
+  closeQuoteModal();
+  showToast('Quote Sent! 🎉', 'We\'ll get back to you within 2 hours.');
+  ['qName','qPhone','qEmail','qMessage','qQty'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('qProduct').selectedIndex = 0;
+}
+</script>
+
 <!-- DYNAMIC DATA LOADER -->
 <script>
 const API='api/api.php';
@@ -1219,7 +1422,7 @@ const CAT_EMOJI_MAP={'platform scale':'⚖️','platform scales':'⚖️','analy
 function getCatEmoji(name){return CAT_EMOJI_MAP[(name||'').toLowerCase().trim()]||'📦';}
 const CAT_BG={'Platform Scale':'linear-gradient(135deg,#e8f0fe,#c7d9ff)','Analytical Balance':'linear-gradient(135deg,#e0f7ea,#b8eecb)','Medical Scale':'linear-gradient(135deg,#fef3e2,#fde1b0)','Jewellery Scale':'linear-gradient(135deg,#f3e8ff,#ddb6ff)','Crane Scale':'linear-gradient(135deg,#e0f0ff,#b3d4ff)','Moisture Analyser':'linear-gradient(135deg,#fde8e8,#ffbdbd)'};
 function revealNow(container){const obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.05,rootMargin:'0px 0px 100px 0px'});(container||document.body).querySelectorAll('.reveal').forEach(function(el){if(el.getBoundingClientRect().top<window.innerHeight+100)el.classList.add('visible');else obs.observe(el);});}
-async function initSite(){try{const res=await fetch(`${API}?action=get_all&v=${Date.now()}`);const data=await res.json();if(!data.success)throw new Error('API failed');applyCompany(data.company||{});renderSliderFromDB(data.slides||[]);renderStatsFromDB(data.stats||[]);renderCatsFromDB(data.categories||[]);renderTestisFromDB(data.testimonials||[]);buildFilterTabs(data.categories||[]);loadProductsFromDB();}catch(e){console.warn('API not available:',e.message);const g=document.getElementById('prodGrid');if(g)g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin-bottom:8px">Cannot connect to database</div></div>';}}
+async function initSite(){try{const res=await fetch(`${API}?action=get_all&v=${Date.now()}`);const data=await res.json();if(!data.success)throw new Error('API failed');applyCompany(data.company||{});renderSliderFromDB(data.slides||[]);renderStatsFromDB(data.stats||[]);renderCatsFromDB(data.categories||[]);renderTestisFromDB(data.testimonials||[]);buildFilterTabs(data.categories||[]);loadProductsFromDB();}catch(e){console.warn('API not available, using static content:',e.message);}}
 function applyCompany(c){if(!c)return;SITE.whatsapp=c.whatsapp||SITE.whatsapp;const w=document.getElementById('waBtnFloat');if(w)w.href=`https://wa.me/${c.whatsapp}?text=Hello!`;['footerName','footerCompany'].forEach(id=>{const el=document.getElementById(id);if(el&&c.name)el.textContent=c.name;});const fa=document.getElementById('footerAbout');if(fa&&c.about)fa.textContent=c.about;const fp=document.getElementById('footerPhone');if(fp&&c.phone)fp.textContent='📞 '+c.phone;const fe=document.getElementById('footerEmail');if(fe&&c.email)fe.textContent='✉️ '+c.email;const fd=document.getElementById('footerAddr');if(fd&&c.address)fd.textContent='📍 '+c.address;}
 const SLIDE_BG=['slide-1','slide-2','slide-3'];
 const SLIDE_SVG=['<svg viewBox="0 0 600 600" fill="none"><circle cx="300" cy="300" r="280" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="200" stroke="white" stroke-width=".5"/><circle cx="300" cy="300" r="120" stroke="white" stroke-width=".5"/><line x1="0" y1="300" x2="600" y2="300" stroke="white" stroke-width=".5"/><line x1="300" y1="0" x2="300" y2="600" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><rect x="50" y="50" width="500" height="500" stroke="white" stroke-width=".5"/><rect x="150" y="150" width="300" height="300" stroke="white" stroke-width=".5"/><line x1="50" y1="50" x2="550" y2="550" stroke="white" stroke-width=".5"/><line x1="550" y1="50" x2="50" y2="550" stroke="white" stroke-width=".5"/></svg>','<svg viewBox="0 0 600 600" fill="none"><polygon points="300,20 580,580 20,580" stroke="white" stroke-width=".5" fill="none"/><polygon points="300,100 500,500 100,500" stroke="white" stroke-width=".5" fill="none"/></svg>'];
@@ -1230,7 +1433,7 @@ function renderCatsFromDB(cats){const grid=document.getElementById('catGrid');if
 function buildFilterTabs(cats){const wrap=document.getElementById('filterTabs');if(!wrap)return;wrap.innerHTML='<button class="filter-tab active" onclick="filterBySlug(\'\',this)">All</button>';cats.forEach(c=>{const btn=document.createElement('button');btn.className='filter-tab';btn.textContent=getCatEmoji(c.name)+' '+c.name;btn.onclick=function(){filterBySlug(c.slug,this);};wrap.appendChild(btn);});twemojify(wrap);}
 function filterBySlug(slug,el){SITE.category=slug;SITE.page=1;document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));if(el)el.classList.add('active');else document.querySelectorAll('.filter-tab').forEach(t=>{if(t.textContent.toLowerCase().includes(slug))t.classList.add('active');});loadProductsFromDB();document.getElementById('products').scrollIntoView({behavior:'smooth'});}
 function onSearchInput(val){clearTimeout(SITE.searchTimer);SITE.searchTimer=setTimeout(()=>{SITE.search=val.trim();SITE.page=1;loadProductsFromDB();},400);}
-async function loadProductsFromDB(){showProductSkeletons();const p=new URLSearchParams({action:'get_products',page:SITE.page,limit:SITE.limit,search:SITE.search,category:SITE.category,v:Date.now()});try{const res=await fetch(`${API}?${p}`);const data=await res.json();if(!data.success)throw new Error(data.message);renderProductsFromDB(data.products||[]);renderProductMeta(data);renderProductPagination(data);}catch(e){document.getElementById('prodGrid').innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#94a3b8"><div style="font-size:36px">😕</div><p>Could not load products</p></div>';}}
+async function loadProductsFromDB(){showProductSkeletons();const p=new URLSearchParams({action:'get_products',page:SITE.page,limit:SITE.limit,search:SITE.search,category:SITE.category,v:Date.now()});try{const res=await fetch(`${API}?${p}`);const data=await res.json();if(!data.success)throw new Error(data.message);renderProductsFromDB(data.products||[]);renderProductMeta(data);renderProductPagination(data);}catch(e){/* Restore static fallback cards if API is unavailable */const g=document.getElementById('prodGrid');if(g)g.innerHTML=STATIC_PROD_HTML;twemojify(g);revealNow(g);}}
 function renderProductsFromDB(prods){const grid=document.getElementById('prodGrid');if(!grid)return;if(!prods.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#94a3b8"><div style="font-size:48px;margin-bottom:12px">🔍</div><h3 style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:8px">No products found</h3><p>Try a different search or category</p></div>';twemojify(grid);return;}grid.innerHTML=prods.map(p=>{const bg=CAT_BG[p.cat]||'linear-gradient(135deg,#e8f0fe,#c7d9ff)',em=getCatEmoji(p.cat);const imgSrc=p.image_url?(p.image_url.startsWith('http')||p.image_url.startsWith('data:')?p.image_url:`images/${p.image_url}`):'';const specs=[p.spec1,p.spec2,p.spec3].filter(Boolean),sn=p.name.replace(/'/g,"\\'");return`<div class="prod-card reveal"><div class="prod-img" style="background:${bg}">${imgSrc?`<img src="${imgSrc}" alt="${p.name}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">`:`<div class="prod-img-icon">${em}</div>`}${p.badge?`<div class="prod-badge badge-blue">${p.badge}</div>`:''}<button class="prod-wishlist" onclick="event.stopPropagation();showToast('Saved!','Added to wishlist.')">♡</button></div><div class="prod-body"><div class="prod-cat">${p.cat}</div><h3 class="prod-name">${p.name}</h3>${p.description?`<p class="prod-desc">${p.description}</p>`:''}${specs.length?`<div class="prod-specs">${specs.map(s=>`<span class="spec-tag">✓ ${s}</span>`).join('')}</div>`:''}<div class="prod-footer"><div class="prod-price"><div class="from">From</div><div class="price">${p.price||'<span style="font-size:13px;font-family:Montserrat,sans-serif">Contact Us</span>'}</div></div><button class="btn-enquire-sm" onclick="sendEnquiry('${sn}','${p.price||''}')">💬 Enquire</button></div></div></div>`;}).join('');twemojify(grid);revealNow(grid);}
 function renderProductMeta(data){const el=document.getElementById('productsMeta');if(!el)return;if(!data.total){el.textContent='No products found';return;}const l=data.limit||SITE.limit,pg=data.page||SITE.page;el.innerHTML=`Showing <strong>${(pg-1)*l+1}–${Math.min(pg*l,data.total)}</strong> of <strong>${data.total}</strong> products`;}
 function renderProductPagination(data){const wrap=document.getElementById('pagination');if(!wrap)return;SITE.totalPages=data.total_pages||1;SITE.page=data.page||1;if(SITE.totalPages<=1){wrap.innerHTML='';return;}let h=`<button class="page-btn" onclick="goPage(${SITE.page-1})" ${!data.has_prev?'disabled':''}>◀</button>`;for(let i=1;i<=SITE.totalPages;i++){if(i===1||i===SITE.totalPages||Math.abs(i-SITE.page)<=1)h+=`<button class="page-btn ${i===SITE.page?'active':''}" onclick="goPage(${i})">${i}</button>`;else if(Math.abs(i-SITE.page)===2)h+=`<span style="color:#94a3b8;padding:0 4px">...</span>`;}h+=`<button class="page-btn" onclick="goPage(${SITE.page+1})" ${!data.has_next?'disabled':''}>▶</button>`;wrap.innerHTML=h;}
@@ -1241,6 +1444,10 @@ function sendEnquiry(name,price){const wa=SITE.whatsapp||'912212345678';const ms
 function showToast(title,msg){const t=document.getElementById('toast');const tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(tT)tT.textContent=title;if(tM)tM.textContent=msg||'';if(t){t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}}
 const _st=document.createElement('style');
 _st.textContent='@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}.page-btn{width:36px;height:36px;border:1.5px solid #e2e8f0;border-radius:8px;background:#fff;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:#94a3b8;display:inline-flex;align-items:center;justify-content:center;transition:all .2s}.page-btn:hover{border-color:#2563c8;color:#2563c8}.page-btn.active{background:#2563c8;border-color:#2563c8;color:#fff}.page-btn:disabled{opacity:.35;cursor:not-allowed}.filter-tab{padding:7px 14px;border:1.5px solid #e2e8f0;border-radius:20px;background:#fff;font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;cursor:pointer;color:#64748b;transition:all .2s}.filter-tab:hover,.filter-tab.active{background:#2563c8;border-color:#2563c8;color:#fff}';
+document.head.appendChild(_st);
+/* Snapshot static product cards before any API call can overwrite them */
+const _pg=document.getElementById('prodGrid');
+const STATIC_PROD_HTML=_pg?_pg.innerHTML:'';
 document.head.appendChild(_st);
 initSite();
 document.addEventListener('DOMContentLoaded',function(){twemojify(document.body);revealNow(document.body);});
