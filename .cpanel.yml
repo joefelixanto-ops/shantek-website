@@ -3,3 +3,4 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/d69ps2gpuotf/public_html/shantek/
     - /bin/cp -R $CRUISE_BUILD_DIR/* $DEPLOYPATH
+  
