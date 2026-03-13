@@ -1,6 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/d69ps2gpuotf/public_html/shantek
-    - /bin/mkdir -p $DEPLOYPATH
-    - /bin/cp -af %PROJECT_ROOT%/. $DEPLOYPATH/
+    - export DEPLOYPATH=/home/d69ps2gpuotf/public_html/shantek/
+    - /bin/cp -R $CRUISE_BUILD_DIR/* $DEPLOYPATH
