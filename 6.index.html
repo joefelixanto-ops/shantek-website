@@ -660,112 +660,6 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
 .cat-emoji img.emoji{height:40px;width:40px;margin:0;vertical-align:middle}
 .prod-img-icon img.emoji{height:72px;width:72px;margin:0;vertical-align:middle}
 
-/* ══════════ GET QUOTE MODAL ══════════ */
-.quote-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(10,22,40,.72);
-  backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  opacity: 0; pointer-events: none;
-  transition: opacity .3s ease;
-}
-.quote-overlay.open {
-  opacity: 1; pointer-events: all;
-}
-.quote-modal {
-  background: var(--white);
-  border-radius: 20px;
-  width: 100%; max-width: 520px;
-  box-shadow: 0 40px 100px rgba(10,22,40,.35);
-  overflow: hidden;
-  transform: translateY(28px) scale(.97);
-  transition: transform .35s cubic-bezier(.34,1.56,.64,1);
-  position: relative;
-}
-.quote-overlay.open .quote-modal {
-  transform: translateY(0) scale(1);
-}
-.quote-modal-header {
-  background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-mid) 60%, #0e2d5a 100%);
-  padding: 28px 32px 24px;
-  position: relative;
-  overflow: hidden;
-}
-.quote-modal-header::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 200' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='520' cy='100' r='160' stroke='white' stroke-width='.5' opacity='.08'/%3E%3Ccircle cx='520' cy='100' r='110' stroke='white' stroke-width='.5' opacity='.06'/%3E%3C/svg%3E") right center / auto 100% no-repeat;
-  pointer-events: none;
-}
-.quote-modal-header .modal-label {
-  font-size: 9px; font-weight: 700; letter-spacing: 3px;
-  text-transform: uppercase; color: var(--accent);
-  margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
-}
-.quote-modal-header .modal-label::before { content: ''; width: 18px; height: 2px; background: var(--accent); border-radius: 2px; }
-.quote-modal-header h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 24px; color: var(--white); margin-bottom: 6px; line-height: 1.2;
-  position: relative; z-index: 1;
-}
-.quote-modal-header p {
-  font-size: 12px; color: rgba(255,255,255,.55); position: relative; z-index: 1;
-}
-.quote-close {
-  position: absolute; top: 18px; right: 18px; z-index: 2;
-  width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
-  color: rgba(255,255,255,.7); font-size: 16px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .2s; line-height: 1;
-}
-.quote-close:hover { background: rgba(255,255,255,.2); color: #fff; }
-.quote-modal-body { padding: 28px 32px 32px; }
-.quote-field { margin-bottom: 16px; }
-.quote-field label {
-  display: block; font-size: 11px; font-weight: 700;
-  letter-spacing: .5px; color: var(--blue-dark); margin-bottom: 6px;
-}
-.quote-field label span { color: var(--sky); }
-.quote-input, .quote-select, .quote-textarea {
-  width: 100%; padding: 11px 14px;
-  border: 1.5px solid var(--gray-light); border-radius: 9px;
-  font-family: 'Montserrat', sans-serif; font-size: 13px;
-  color: var(--text); background: var(--white);
-  outline: none; transition: border-color .2s, box-shadow .2s;
-  appearance: none; -webkit-appearance: none;
-}
-.quote-input:focus, .quote-select:focus, .quote-textarea:focus {
-  border-color: var(--sky);
-  box-shadow: 0 0 0 3px rgba(59,130,246,.12);
-}
-.quote-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; background-size: 16px; padding-right: 36px; cursor: pointer; }
-.quote-textarea { resize: vertical; min-height: 80px; }
-.quote-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.quote-submit {
-  width: 100%; padding: 14px;
-  background: linear-gradient(135deg, var(--blue-light), var(--sky));
-  color: #fff; border: none; border-radius: 10px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px; font-weight: 700; letter-spacing: .8px;
-  text-transform: uppercase; cursor: pointer;
-  box-shadow: 0 6px 22px rgba(37,99,200,.35);
-  transition: all .25s; margin-top: 6px;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.quote-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(37,99,200,.45); }
-.quote-submit:active { transform: translateY(0); }
-.quote-note {
-  text-align: center; font-size: 10px; color: var(--gray);
-  margin-top: 12px; line-height: 1.6;
-}
-
-@media (max-width: 540px) {
-  .quote-modal-header { padding: 22px 22px 18px; }
-  .quote-modal-body { padding: 20px 22px 24px; }
-  .quote-row { grid-template-columns: 1fr; gap: 0; }
-}
 </style>
 </head>
 <body>
@@ -802,7 +696,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
       </div>
     </a>
     <nav class="desktop-nav">
-      <a href="#" class="active">Home</a>
+      <a href="#" class="active">JOE</a>
       <a href="#products">Products</a>
       <a href="#categories">Categories</a>
       <a href="#about">About Us</a>
@@ -810,7 +704,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </nav>
     <div class="header-actions">
       <a href="catalogue/shantek-catalogue.pdf" download class="btn-outline">Catalogue</a>
-      <button class="btn-primary-sm" onclick="openQuoteModal()">Get Quote</button>
+      <button class="btn-primary-sm" onclick="showToast('Enquiry Sent!', 'We\'ll call you within 2 hours.')">Get Quote</button>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -820,13 +714,13 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
 
 <!-- MOBILE MENU -->
 <nav class="mobile-menu" id="mobileMenu">
-  <a href="#" onclick="closeMenu()">Home</a>
+  <a href="#" onclick="closeMenu()">JOE</a>
   <a href="#products" onclick="closeMenu()">Products</a>
   <a href="#categories" onclick="closeMenu()">Categories</a>
   <a href="#about" onclick="closeMenu()">About Us</a>
   <a href="#contact" onclick="closeMenu()">Contact</a>
   <div class="mobile-menu-actions">
-    <button class="btn-mobile-primary" onclick="openQuoteModal(); closeMenu();">Get a Free Quote</button>
+    <button class="btn-mobile-primary" onclick="showToast('Enquiry Sent!','We\'ll call you within 2 hours.'); closeMenu();">Get a Free Quote</button>
     <a href="catalogue/shantek-catalogue.pdf" download class="btn-mobile-outline">Download Catalogue</a>
   </div>
   <div class="mobile-contact-info">
@@ -1223,7 +1117,7 @@ img.emoji{display:inline-block;height:1em;width:1em;margin:0 .05em 0 .1em;vertic
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Shantek Instruments Pvt. Ltd. All rights reserved.</p>
+    <p>© Joe felix anto changes  Pvt. Ltd. All rights reserved.</p>
     <div class="certs">
       <span class="cert">ISO 9001:2015</span>
       <span class="cert">NABL</span>
@@ -1313,103 +1207,6 @@ function showToast(title, msg) {
   const _tT=document.getElementById('toast-title')||document.getElementById('toastTitle');const _tM=document.getElementById('toast-msg')||document.getElementById('toastMsg');if(_tT)_tT.textContent=title;if(_tM)_tM.textContent=msg||'';
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
-}
-</script>
-
-<!-- GET QUOTE MODAL -->
-<div class="quote-overlay" id="quoteOverlay" onclick="handleOverlayClick(event)">
-  <div class="quote-modal" id="quoteModal">
-    <div class="quote-modal-header">
-      <button class="quote-close" onclick="closeQuoteModal()" aria-label="Close">✕</button>
-      <div class="modal-label">Free Consultation</div>
-      <h3>Get a Quote</h3>
-      <p>Fill in your details and we'll respond within 2 business hours.</p>
-    </div>
-    <div class="quote-modal-body">
-      <div class="quote-row">
-        <div class="quote-field">
-          <label>Full Name <span>*</span></label>
-          <input type="text" class="quote-input" id="qName" placeholder="Your name">
-        </div>
-        <div class="quote-field">
-          <label>Phone Number <span>*</span></label>
-          <input type="tel" class="quote-input" id="qPhone" placeholder="+91 XXXXX XXXXX">
-        </div>
-      </div>
-      <div class="quote-field">
-        <label>Email Address</label>
-        <input type="email" class="quote-input" id="qEmail" placeholder="you@company.com">
-      </div>
-      <div class="quote-row">
-        <div class="quote-field">
-          <label>Product / Category <span>*</span></label>
-          <select class="quote-select" id="qProduct">
-            <option value="" disabled selected>Select product type</option>
-            <option>Platform Scales</option>
-            <option>Analytical Balances</option>
-            <option>Medical Scales</option>
-            <option>Jewellery Scales</option>
-            <option>Crane Scales</option>
-            <option>Moisture Analysers</option>
-            <option>Bench Scales</option>
-            <option>Floor Scales</option>
-            <option>Other / Not Sure</option>
-          </select>
-        </div>
-        <div class="quote-field">
-          <label>Quantity Required</label>
-          <input type="number" class="quote-input" id="qQty" placeholder="e.g. 5" min="1">
-        </div>
-      </div>
-      <div class="quote-field">
-        <label>Message / Specifications</label>
-        <textarea class="quote-textarea" id="qMessage" placeholder="Describe your requirements, capacity needed, or any specific features…"></textarea>
-      </div>
-      <button class="quote-submit" onclick="submitQuoteForm()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        Send My Quote Request
-      </button>
-      <p class="quote-note">🔒 Your details are safe with us. No spam, ever.</p>
-    </div>
-  </div>
-</div>
-
-<script>
-function openQuoteModal() {
-  document.getElementById('quoteOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeQuoteModal() {
-  document.getElementById('quoteOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('quoteOverlay')) closeQuoteModal();
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeQuoteModal();
-});
-function submitQuoteForm() {
-  const name    = document.getElementById('qName').value.trim();
-  const phone   = document.getElementById('qPhone').value.trim();
-  const product = document.getElementById('qProduct').value;
-  if (!name) { document.getElementById('qName').focus(); showToast('Required', 'Please enter your name.'); return; }
-  if (!phone) { document.getElementById('qPhone').focus(); showToast('Required', 'Please enter your phone number.'); return; }
-  if (!product) { document.getElementById('qProduct').focus(); showToast('Required', 'Please select a product type.'); return; }
-  const email   = document.getElementById('qEmail').value.trim();
-  const qty     = document.getElementById('qQty').value.trim();
-  const message = document.getElementById('qMessage').value.trim();
-  const wa = SITE.whatsapp || '912212345678';
-  let text = `Hello! I'd like to request a quote.\n\n*Name:* ${name}\n*Phone:* ${phone}`;
-  if (email)   text += `\n*Email:* ${email}`;
-  text += `\n*Product:* ${product}`;
-  if (qty)     text += `\n*Quantity:* ${qty}`;
-  if (message) text += `\n*Message:* ${message}`;
-  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(text)}`, '_blank');
-  closeQuoteModal();
-  showToast('Quote Sent! 🎉', 'We\'ll get back to you within 2 hours.');
-  ['qName','qPhone','qEmail','qMessage','qQty'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('qProduct').selectedIndex = 0;
 }
 </script>
 
